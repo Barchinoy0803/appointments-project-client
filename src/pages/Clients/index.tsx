@@ -3,11 +3,12 @@ import CustomTable from "../../components/Table"
 import { useGetUsersQuery } from '../../service/api/user.api'
 
 const Clients = () => {
-    const {data: any} = useGetUsersQuery({})
-    
+    const { data } = useGetUsersQuery({})
+    console.log(data);
+
     return (
         <div>
-            <CustomTable/>
+            <CustomTable />
         </div>
     )
 }
