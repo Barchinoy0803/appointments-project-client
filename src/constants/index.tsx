@@ -1,13 +1,14 @@
-import { FaBorderAll, FaUsers, FaUserTie } from "react-icons/fa";
+import { FaBorderAll, FaUsers} from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
-import { MonthlyReportItem, MostUsedService } from "../types";
+import { MonthlyReportItem, MostUsedService, User } from "../types";
+import { ColumnType } from "antd/es/table";
+import { Tag } from "antd";
 
 export const SidebarItems = [
   { title: "Statistics", link: "statistics", icon: <IoStatsChart /> },
   { title: "Appointments", link: "booking", icon: <FaBorderAll /> },
-  { title: "Specialists", link: "expert", icon: <FaUserTie /> },
-  { title: "Clients", link: "client", icon: <FaUsers /> },
+  { title: "Users", link: "users", icon: <FaUsers /> },
   { title: "Profile", link: "profile", icon: <CgProfile /> },
 ]
 
@@ -26,3 +27,46 @@ export const mostUsedServicesData: MostUsedService[] = [
   { service: "Stilist", percent: 10 },
   { service: "Designer", percent: 30 },
 ];
+
+export const columns: ColumnType<User>[] = [
+  {
+    title: 'First name',
+    dataIndex: 'first_name',
+    key: 'firstname',
+  },
+  {
+    title: 'Last name',
+    dataIndex: 'last_name',
+    key: 'lastname',
+  },
+  {
+    title: 'Phone number',
+    dataIndex: 'phone_number',
+    key: 'phoneNumber',
+  },
+  {
+    title: "Role",
+    dataIndex: "role",
+    key: "role",
+    render: (role: string) => {
+      let color: string = "grey"
+
+      switch (role?.toLowerCase()) {
+        case "admin":
+          color = "blue";
+          break;
+        case "client":
+          color = "red";
+          break;
+        case "specialist":
+          color = "green";
+          break;
+      }
+      return <Tag color={color}>{role.toUpperCase()}</Tag>;
+    }
+  }
+]
+
+export const defaultModalState = {
+  isOpen: false
+}

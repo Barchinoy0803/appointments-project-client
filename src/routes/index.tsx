@@ -10,13 +10,13 @@ const MainRouter = () => {
     return (
         useRoutes([
             {
-                path: "/dashboard", element: <Dashboard />, 
+                path: "/", element: <Dashboard />,
                 children: [
-                    { path: "booking", element: <Booking /> },
+                    { index: true, element: <Statistics /> },
                     { path: "statistics", element: <Statistics /> },
+                    { path: "booking", element: <Booking /> },
                     { path: "services", element: <Services /> },
-                    { path: "expert", element: <Clients /> },
-                    { path: "client", element: <Clients /> },
+                    { path: "users", element: <Clients /> },
                     { path: "profile", element: <Profile /> },
                 ]
             }

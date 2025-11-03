@@ -15,3 +15,30 @@ export interface DataType {
     address: string;
     tags: string;
 }
+
+export interface User {
+    id: number;
+    first_name: string;
+    last_name: string;
+    phone_number: string;
+}
+
+export interface ModalType {
+    id?: number;
+    isOpen: boolean;
+    type?: ACTIONS;
+}
+
+export enum ACTIONS {
+    EDIT = "EDIT",
+    DELETE = "DELETE",
+    CREATE = "CREATE"
+}
+
+export type FieldType = {
+    first_name: string;
+    last_name: string;
+    password: string;
+    phone_number: string;
+    role: string;
+};

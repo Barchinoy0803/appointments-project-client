@@ -13,13 +13,13 @@ const extendedApi = mainApi.injectEndpoints({
         createUser: build.mutation({
             query: (body) => ({
                 method: "POST",
-                url: "/admin/users",
+                url: "/admin/users/",
                 body
             }),
-            // providesTags: ['USER']
+            invalidatesTags: ['USER']
         }),
     }),
     overrideExisting: false
 })
 
-export const { useGetUsersQuery } = extendedApi;
+export const { useGetUsersQuery, useCreateUserMutation } = extendedApi;
