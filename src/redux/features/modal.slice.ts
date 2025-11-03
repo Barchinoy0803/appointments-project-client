@@ -1,9 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ModalType } from "../../types";
-import { defaultModalState } from "../../constants";
+// import { defaultModalState } from "../../constants";
 
 export interface ModalState {
     usersModal: ModalType
+}
+
+export const defaultModalState = {
+  isOpen: false
 }
 
 const initialState: ModalState = {

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import CustomTable from "../../components/Table"
 import { useCreateUserMutation, useGetUsersQuery } from '../../service/api/user.api'
-import { columns } from "../../constants/index"
+import { userTableColumns } from "../../constants/index"
 import { ACTIONS, FieldType, User } from "../../types/index"
 import { FaPlus } from "react-icons/fa";
 import { useDispatch } from 'react-redux'
@@ -40,7 +40,7 @@ const Clients = () => {
                     Add
                 </Button>
             </div>
-            <CustomTable<User> data={data} columns={columns} key={data?.id} />
+            <CustomTable<User> data={data} columns={userTableColumns(dispatch)} key={data?.id}/>
             <CustomModal onFinish={onFinish} onFinishFailed={onFinishFailed} loading={isLoading} />
         </div>
     )

@@ -35,6 +35,12 @@ export enum ACTIONS {
     CREATE = "CREATE"
 }
 
+export enum ROLES{
+    ADMIN = "admin",
+    CLIENT = "client",
+    SPECIALIST = "specialist"
+}
+
 export type FieldType = {
     first_name: string;
     last_name: string;
