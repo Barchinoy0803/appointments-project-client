@@ -31,7 +31,7 @@ const CustomModal = ({ onFinish, onFinishFailed, loading }: CustomModalProps) =>
             >
                 <Form
                     name="basic"
-                    initialValues={{ remember: true }}
+                    initialValues={{ remember: true, role: "admin" }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
@@ -74,7 +74,7 @@ const CustomModal = ({ onFinish, onFinishFailed, loading }: CustomModalProps) =>
                         name="role"
                         rules={[{ required: true, message: 'Please select role!' }]}
                     >
-                        <Select defaultValue="admin">
+                        <Select>
                             <Select.Option value="admin">Admin</Select.Option>
                             <Select.Option value="client">Client</Select.Option>
                             <Select.Option value="specialist">Specialist</Select.Option>
