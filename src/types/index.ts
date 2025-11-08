@@ -48,3 +48,8 @@ export type FieldType = {
     phone_number: string;
     role: string;
 };
+
+export type ParamsType = {
+    limit: number;
+    offset: number
+}

@@ -7,7 +7,7 @@ export interface ModalState {
 }
 
 export const defaultModalState = {
-  isOpen: false
+    isOpen: false
 }
 
 const initialState: ModalState = {
@@ -24,5 +24,5 @@ export const modalSlice = createSlice({
     }
 })
 
-export const {setUsersModal} = modalSlice.actions
+export const { setUsersModal } = modalSlice.actions
 export default modalSlice.reducer

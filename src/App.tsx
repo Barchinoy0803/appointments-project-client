@@ -1,10 +1,15 @@
 import { memo } from 'react'
 import MainRouter from './routes'
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
   return (
     <div>
-      <MainRouter/>
+      <MainRouter />
+      < Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
     </div>
   )
 }

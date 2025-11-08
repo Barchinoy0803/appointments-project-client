@@ -1,13 +1,12 @@
 import { FaBorderAll, FaUsers } from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
-import { ACTIONS, MonthlyReportItem, MostUsedService, ROLES} from "../types";
+import { ACTIONS, MonthlyReportItem, MostUsedService, ROLES } from "../types";
 import { Button, Tag, Tooltip } from "antd";
 import { RiDeleteBin7Line } from "react-icons/ri";
 import { LiaEditSolid } from "react-icons/lia";
 import { AppDispatch } from "../redux";
 import { setUsersModal } from "../redux/features/modal.slice";
-
 
 
 export const SidebarItems = [
@@ -33,8 +32,7 @@ export const mostUsedServicesData: MostUsedService[] = [
   { service: "Designer", percent: 30 },
 ];
 
-
-export const userTableColumns = (dispatch: AppDispatch) =>
+export const userTableColumns = (dispatch: AppDispatch, handleDelete: (id: number) => void) =>
   [
     {
       title: 'First name',
@@ -74,28 +72,25 @@ export const userTableColumns = (dispatch: AppDispatch) =>
     },
     {
       title: "Actions",
-      dataIndex: "action",
-      render: () => {
+      dataIndex: "id",
+      key: "actions",
+      render: (id: number) => {
         return <div className="flex gap-3">
           <Tooltip title="Delete">
-            <Button onClick={() => dispatch(setUsersModal({ isOpen: true, type: ACTIONS.DELETE }))} type="text" shape="circle">
+            <Button onClick={() => handleDelete(id)} type="text" shape="circle">
               <RiDeleteBin7Line className="text-[20px] text-red-400" />
             </Button>
           </Tooltip>
 
           <Tooltip title="Edit">
-            <Button onClick={() => dispatch(setUsersModal({ isOpen: true, type: ACTIONS.EDIT }))} type="text" shape="circle">
+            <Button onClick={() => dispatch(setUsersModal({ isOpen: true, type: ACTIONS.EDIT, id }))} type="text" shape="circle">
               <LiaEditSolid className="text-[20px] text-orange-400" />
             </Button>
           </Tooltip>
         </div>
       }
     }
-  ]
-
-
-
-
+];
 
 export const roleOptions = [
   {
@@ -110,4 +105,6 @@ export const roleOptions = [
     label: "Specialist",
     value: ROLES.SPECIALIST,
   },
-]
+];
+
+export const ITEMS_PER_PAGE = 10

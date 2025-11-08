@@ -1,46 +1,62 @@
-import { Button, Form, Input, Modal, Select, Typography } from 'antd';
+import { Button, Form, FormInstance, Input, Modal, Select, Typography } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux';
 import { setUsersModal } from '../../redux/features/modal.slice';
 import { ACTIONS, FieldType } from '../../types';
-import type { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 import { roleOptions } from '../../constants';
-import { getUserModalTitle } from './helpers';
+import { getUserModalTitle, setButtonTitle } from './helpers';
+import { useGetOneUserQuery } from '../../service/api/user.api';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useEffect } from 'react';
+import { userDataValidation } from '../../validations/user.validation';
 
 interface CustomModalProps {
     onFinish: (values: FieldType) => void,
-    onFinishFailed: (errorInfo: ValidateErrorEntity<FieldType>) => void,
-    loading: boolean
+    loading: boolean,
+    form: FormInstance<any>
 }
 
-const CustomModal = ({ onFinish, onFinishFailed, loading }: CustomModalProps) => {
-    const { isOpen, type } = useSelector((state: RootState) => state.modalSlice.usersModal)
+const CustomModal = ({ onFinish,  loading, form }: CustomModalProps) => {
+    const { isOpen, type, id } = useSelector((state: RootState) => state.modalSlice.usersModal)
     const dispatch = useDispatch()
+
+    const { data: userData } = useGetOneUserQuery(id ?? skipToken)
+
+    // const error = form.getFieldsError()
+    // const hasErrors = useMemo(() => {
+    //     return error.some(field => field.errors.length > 0);
+    // }, [error])
+
+    useEffect(() => {
+        if (type === ACTIONS.EDIT && userData) {
+            form.setFieldsValue(userData)
+        }
+    }, [userData, type])
 
     const handleCancel = () => {
         dispatch(setUsersModal({ isOpen: false }))
+        form.resetFields()
     }
-
 
     return (
         <>
             <Modal
-                // title={getUserModalTitle(type!)}
+                title={getUserModalTitle(type!)}
                 closable={{ 'aria-label': 'Custom Close Button' }}
                 open={isOpen}
                 footer={null}
                 onCancel={handleCancel}
             >
                 <Form
+                    form={form}
                     name="basic"
                     initialValues={{ remember: true, role: "admin" }}
                     onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
                     autoComplete="off"
                     layout='vertical'
                 >
                     {
-                        type === ACTIONS.CREATE ?
+                        type === ACTIONS.CREATE || type === ACTIONS.EDIT ?
                             <>
                                 <Form.Item<FieldType>
                                     label="First name"
@@ -61,7 +77,7 @@ const CustomModal = ({ onFinish, onFinishFailed, loading }: CustomModalProps) =>
                                 <Form.Item<FieldType>
                                     label="Phone number"
                                     name="phone_number"
-                                    rules={[{ required: true, message: 'Please input your phone number!' }]}
+                                    rules={userDataValidation.phone_number}
                                 >
                                     <Input />
                                 </Form.Item>
@@ -69,7 +85,7 @@ const CustomModal = ({ onFinish, onFinishFailed, loading }: CustomModalProps) =>
                                 <Form.Item<FieldType>
                                     label="Password"
                                     name="password"
-                                    rules={[{ required: true, message: 'Please input your password!' }]}
+                                    rules={userDataValidation.password}
                                 >
                                     <Input.Password />
                                 </Form.Item>
@@ -89,14 +105,46 @@ const CustomModal = ({ onFinish, onFinishFailed, loading }: CustomModalProps) =>
                                 </Form.Item>
                             </>
                             :
-                            <Typography>Are you sure delete?</Typography>
+                            <Typography style={{ fontSize: 18 }}>Are you sure delete?</Typography>
                     }
 
-                    <Form.Item label={null}>
-                        <Button type="primary" htmlType="submit" className='w-full' loading={loading}>
-                            
-                        </Button>
+                    <Form.Item
+                        label={null}
+                    >
+                        {type === ACTIONS.DELETE ? (
+                            <div className='flex gap-4 justify-end pt-3'>
+                                <Button
+                                    type="default"
+                                    className="w-1/2"
+                                    loading={loading}
+                                    onClick={handleCancel}
+                                >
+                                    Cancel
+                                </Button>
+
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    danger
+                                    className="w-1/2"
+                                    loading={loading}
+                                >
+                                    {setButtonTitle(type!)}
+                                </Button>
+                            </div>
+                        ) : (
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                block
+                                loading={loading}
+                                // disabled={hasErrors}
+                            >
+                                {setButtonTitle(type!)}
+                            </Button>
+                        )}
                     </Form.Item>
+
                 </Form>
             </Modal>
         </>

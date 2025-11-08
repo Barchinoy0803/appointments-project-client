@@ -9,7 +9,13 @@ interface CustomTableProps<T> {
 const CustomTable = <T,>({ data, columns }: CustomTableProps<T>) => {
     return (
         <div>
-            <Table<T> columns={columns} dataSource={data} rowKey="id"/>
+            <Table<T> 
+            columns={columns} 
+            dataSource={data} 
+            rowKey="id"
+            pagination={false}
+            />
+            
         </div>
     )
 }

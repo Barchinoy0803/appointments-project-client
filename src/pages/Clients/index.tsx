@@ -1,18 +1,34 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import CustomTable from "../../components/Table"
-import { useCreateUserMutation, useGetUsersQuery } from '../../service/api/user.api'
-import { userTableColumns } from "../../constants/index"
+import { useCreateUserMutation, useDeleteUserMutation, useGetUsersQuery, useUpdateUserMutation } from '../../service/api/user.api'
+import { ITEMS_PER_PAGE, roleOptions, userTableColumns } from "../../constants/index"
 import { ACTIONS, FieldType, User } from "../../types/index"
 import { FaPlus } from "react-icons/fa";
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setUsersModal } from '../../redux/features/modal.slice'
 import CustomModal from '../../components/Popup'
-import { Button, FormProps } from 'antd';
+import { Button, Form, FormProps, Modal, Pagination, Select } from 'antd';
+import { RootState } from '../../redux'
+import { getErrors } from './helpers'
+import toast from 'react-hot-toast'
+import { useParamsHook } from '../../hooks/useParamsHook'
 
 const Clients = () => {
-    const dispatch = useDispatch()
-    const { data } = useGetUsersQuery({})
+    const [form] = Form.useForm<FieldType>();
+
+    const { getParam, setParam } = useParamsHook();
+    const page = getParam("page") || "1"
+    const search = getParam("search") || ""
+
+    const [role, setRole] = useState<string>("")
+
+    const { data } = useGetUsersQuery({ offset: (Number(page) - 1) * ITEMS_PER_PAGE, search, role })
     const [createUser, { isLoading }] = useCreateUserMutation()
+    const [deleteUser] = useDeleteUserMutation()
+    const [updateUser] = useUpdateUserMutation()
+
+    const dispatch = useDispatch()
+    const { type, id } = useSelector((state: RootState) => state.modalSlice.usersModal)
 
     const handleOpenModal = () => {
         dispatch(setUsersModal({ isOpen: true, type: ACTIONS.CREATE }))
@@ -20,28 +36,63 @@ const Clients = () => {
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         try {
-            await createUser(values).unwrap()
+            if (type === ACTIONS.EDIT) {
+                await updateUser({ id, body: values }).unwrap()
+                toast.success("Successfully updated")
+            } else {
+                await createUser(values).unwrap()
+                toast.success("Successfully created")
+            }
             dispatch(setUsersModal({ isOpen: false }))
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            form.setFields(getErrors(error.data))
         }
-
+        form.resetFields()
     };
 
-    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
+    const handleDelete = (id: number) => {
+        Modal.confirm({
+            title: "Are you sure you want to delete this user?",
+            okText: "Yes, delete",
+            cancelText: "Cancel",
+            okType: "danger",
+            onOk: async () => {
+                try {
+                    await deleteUser(id).unwrap()
+                    toast.success("Successfully deleted")
+                } catch (err) {
+                    console.error(err)
+                }
+            }
+        })
+    }
 
     return (
         <div>
-            <div className='flex justify-end p-4 items-center'>
+            <div className='flex gap-5 justify-end p-4 items-center'>
+                <Select
+                    value={role}
+                    onChange={(value) => setRole(value)}
+                    defaultValue=""
+                    style={{ width: 160 }}
+                    options={[{ value: "", label: "All" }, ...roleOptions]}
+                />
+
                 <Button onClick={handleOpenModal} type="default" icon={<FaPlus />} iconPosition={'start'}>
                     Add
                 </Button>
             </div>
-            <CustomTable<User> data={data} columns={userTableColumns(dispatch)} key={data?.id}/>
-            <CustomModal onFinish={onFinish} onFinishFailed={onFinishFailed} loading={isLoading} />
+
+            <CustomTable<User> data={Array.isArray(data?.results) ? data.results : []} columns={userTableColumns(dispatch, handleDelete)} key={data?.id} />
+            <div className='mt-6 flex justify-end'>
+                <Pagination
+                    current={Number(page)}
+                    onChange={(value) => setParam("page", value.toString())}
+                    pageSize={ITEMS_PER_PAGE}
+                    total={data?.count}
+                />
+            </div>
+            <CustomModal onFinish={onFinish} loading={isLoading} form={form} />
         </div>
     )
 }
