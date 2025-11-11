@@ -1,9 +1,11 @@
 import { useRoutes } from "react-router-dom"
 import Dashboard from "../pages/Dashboard"
-import Booking from "../pages/Booking"
 import Statistics from "../pages/Statistics"
 import Clients from "../pages/Clients"
 import Profile from "../pages/Profile"
+import Appointments from "../pages/Appointments"
+import Service from "../pages/Service"
+import Businesses from "../pages/Business"
 
 const MainRouter = () => {
     return (
@@ -13,7 +15,9 @@ const MainRouter = () => {
                 children: [
                     { index: true, element: <Statistics /> },
                     { path: "statistics", element: <Statistics /> },
-                    { path: "booking", element: <Booking /> },
+                    { path: "appointments", element: <Appointments /> },
+                    { path: "services", element: <Service /> },
+                    { path: "businesses", element: <Businesses /> },
                     { path: "users", element: <Clients /> },
                     { path: "profile", element: <Profile /> },
                 ]

@@ -1,13 +1,13 @@
 import { memo, useState } from 'react'
 import CustomTable from "../../components/Table"
 import { useCreateUserMutation, useDeleteUserMutation, useGetUsersQuery, useUpdateUserMutation } from '../../service/api/user.api'
-import { ITEMS_PER_PAGE, roleOptions, userTableColumns } from "../../constants/index"
+import { ITEMS_PER_PAGE, orderOptions, roleOptions, userTableColumns } from "../../constants/index"
 import { ACTIONS, FieldType, User } from "../../types/index"
 import { FaPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux'
 import { setUsersModal } from '../../redux/features/modal.slice'
 import CustomModal from '../../components/Popup'
-import { Button, Form, FormProps, Modal, Pagination, Select } from 'antd';
+import { Button, Form, FormProps, Modal, Pagination, Select, Tooltip } from 'antd';
 import { RootState } from '../../redux'
 import { getErrors } from './helpers'
 import toast from 'react-hot-toast'
@@ -21,8 +21,9 @@ const Clients = () => {
     const search = getParam("search") || ""
 
     const [role, setRole] = useState<string>("")
+    const [ordering, setOrdering] = useState<string>("")
 
-    const { data } = useGetUsersQuery({ offset: (Number(page) - 1) * ITEMS_PER_PAGE, search, role })
+    const { data } = useGetUsersQuery({ offset: (Number(page) - 1) * ITEMS_PER_PAGE, search, role, ordering })
     const [createUser, { isLoading }] = useCreateUserMutation()
     const [deleteUser] = useDeleteUserMutation()
     const [updateUser] = useUpdateUserMutation()
@@ -70,20 +71,32 @@ const Clients = () => {
     return (
         <div>
             <div className='flex gap-5 justify-end p-4 items-center'>
-                <Select
-                    value={role}
-                    onChange={(value) => setRole(value)}
-                    defaultValue=""
-                    style={{ width: 160 }}
-                    options={[{ value: "", label: "All" }, ...roleOptions]}
-                />
+                <Tooltip title="Date">
+                    <Select
+                        value={ordering}
+                        onChange={(value) => setOrdering(value)}
+                        defaultValue=""
+                        style={{ width: 160 }}
+                        options={[{ value: "", label: "All" }, ...orderOptions]}
+                    />
+                </Tooltip>
+                <Tooltip title="Role">
+                    <Select
+                        value={role}
+                        onChange={(value) => setRole(value)}
+                        defaultValue=""
+                        style={{ width: 160 }}
+                        options={[{ value: "", label: "All" }, ...roleOptions]}
+                    />
+                </Tooltip>
+
 
                 <Button onClick={handleOpenModal} type="default" icon={<FaPlus />} iconPosition={'start'}>
                     Add
                 </Button>
             </div>
 
-            <CustomTable<User> data={Array.isArray(data?.results) ? data.results : []} columns={userTableColumns(dispatch, handleDelete)} key={data?.id} />
+            <CustomTable<User> data={Array.isArray(data?.results) ? data.results : []} columns={userTableColumns(dispatch, handleDelete, Number(page))} key={data?.id} />
             <div className='mt-6 flex justify-end'>
                 <Pagination
                     current={Number(page)}

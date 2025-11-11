@@ -23,6 +23,32 @@ export interface User {
     phone_number: string;
 }
 
+export interface Appointment {
+    id: number;
+    status: APPOINTMENT_STATUS;
+    specialist: User;
+    client: User;
+    service: Service;
+}
+
+export interface Service {
+    name: string;
+    description: string;
+    is_active: boolean;
+    business: Business;
+}
+
+export interface Business {
+    name: string;
+    description: string;
+    type: BUSINESS_TYPE;
+    address: string;
+    latitude: string;
+    longitude: string;
+    contact: string;
+    opening_hours: string;
+}
+
 export interface ModalType {
     id?: number;
     isOpen: boolean;
@@ -35,10 +61,25 @@ export enum ACTIONS {
     CREATE = "CREATE"
 }
 
-export enum ROLES{
+export enum ROLES {
     ADMIN = "admin",
     CLIENT = "client",
     SPECIALIST = "specialist"
+}
+
+export enum APPOINTMENT_STATUS {
+    PENDING = "pending",
+    APPROVED = "approved",
+    REJECTED = "rejected",
+    CANCELED = "canceled",
+    MOVED = "moved "
+}
+
+export enum BUSINESS_TYPE {
+    CLINIC = "clinic",
+    BARBERSHOP = "barbershop",
+    BEAUTY_SHOP = "beautyshop",
+    SPORT = "sport"
 }
 
 export type FieldType = {
