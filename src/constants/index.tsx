@@ -114,7 +114,7 @@ export const userTableColumns = (dispatch: AppDispatch, handleDelete: (id: numbe
       },
       sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
     },
-  ];
+];
 
 export const appointmentTableColumns = (page: number = 1) =>
   [
@@ -180,7 +180,7 @@ export const appointmentTableColumns = (page: number = 1) =>
       },
       sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
     },
-  ];
+];
 
 export const serviceTableColumns = (page: number = 1) => [
   {

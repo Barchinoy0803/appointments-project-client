@@ -11,5 +11,4 @@ const Statistics = () => {
         </div>
     );
 };
-//
 export default memo(Statistics);
