@@ -21,6 +21,7 @@ export interface User {
     first_name: string;
     last_name: string;
     phone_number: string;
+    unhashed_password: string;
 }
 
 export interface Appointment {
@@ -93,4 +94,19 @@ export type FieldType = {
 export type ParamsType = {
     limit: number;
     offset: number
+}
+
+export type LoginType = {
+    phone_number: string;
+    password: string;
+}
+
+export interface LoginData {
+    data: {
+        status_code: number;
+        data: {
+            access: string;
+            refresh: string;
+        }
+    }
 }

@@ -22,14 +22,9 @@ const CustomModal = ({ onFinish,  loading, form }: CustomModalProps) => {
 
     const { data: userData } = useGetOneUserQuery(id ?? skipToken)
 
-    // const error = form.getFieldsError()
-    // const hasErrors = useMemo(() => {
-    //     return error.some(field => field.errors.length > 0);
-    // }, [error])
-
     useEffect(() => {
         if (type === ACTIONS.EDIT && userData) {
-            form.setFieldsValue(userData)
+            form.setFieldsValue({...userData, password: userData.unhashed_password})
         }
     }, [userData, type])
 
@@ -138,7 +133,6 @@ const CustomModal = ({ onFinish,  loading, form }: CustomModalProps) => {
                                 htmlType="submit"
                                 block
                                 loading={loading}
-                                // disabled={hasErrors}
                             >
                                 {setButtonTitle(type!)}
                             </Button>

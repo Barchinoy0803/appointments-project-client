@@ -1,34 +1,27 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { createApi } from '@reduxjs/toolkit/query/react';
-// import { getToken, removeToken, validateToken } from '../../helpers';
+import { validateToken } from '../../helpers';
+import { RootState } from '../../redux';
+import { logout } from '../../redux/features/user.slice';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BASE_URL,
-    // prepareHeaders: (headers) => {
-    //     const token = getToken() || '';
-    //     if (validateToken(token)) {
-    //         headers.set('Authorization', `Bearer ${token}`);
-    //     }
-
-    //     const skipContentType = headers.get('X-skip-Content-Type') === 'true';
-    //     headers.delete('X-skip-Content-Type');
-
-    //     if (!skipContentType) {
-    //         headers.set('Content-Type', 'application/json');
-    //     }
-    //     headers.set('Accept', 'application/json');
-
-    //     return headers;
-    // },
+    prepareHeaders: (headers, { getState }) => {
+        const token = (getState() as RootState).userSlice.token
+        if (validateToken(token)) {
+            headers.set('Authorization', `Bearer ${token}`);
+        }
+        return headers;
+    }
 });
 
 const baseQueryWithStatusHandling: typeof baseQuery = async (args, api, extraOptions) => {
     const result = await baseQuery(args, api, extraOptions);
 
-    // if (result?.error?.status === 401 || result?.error?.status === 403) {
-    //     // removeToken()
-    //     window.location.href = '/auth/login';
-    // }
+    if (result?.error?.status === 401 || result?.error?.status === 403) {
+        logout()
+        window.location.href = 'login';
+    }
 
     return result;
 };

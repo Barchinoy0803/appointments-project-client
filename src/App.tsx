@@ -4,7 +4,7 @@ import { Toaster } from 'react-hot-toast';
 
 const App = () => {
   return (
-    <div>
+    <div className='h-screen'>
       <MainRouter />
       < Toaster
         position="top-center"
