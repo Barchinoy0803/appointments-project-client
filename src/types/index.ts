@@ -1,11 +1,11 @@
 export type MonthlyReportItem = {
-    month: string;
-    sales: number;
+    service_name: string;
+    total_appointments: number;
 };
 
 export type MostUsedService = {
-    service: string;
-    percent: number;
+    service_id__name: string;
+    total: number;
 };
 
 export interface DataType {

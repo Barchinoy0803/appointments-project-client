@@ -3,7 +3,7 @@ import { MdHomeRepairService } from "react-icons/md";
 import { GrServicePlay } from "react-icons/gr";
 import { IoStatsChart } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
-import { ACTIONS, APPOINTMENT_STATUS, BUSINESS_TYPE, MonthlyReportItem, MostUsedService, ROLES } from "../types";
+import { ACTIONS, APPOINTMENT_STATUS, BUSINESS_TYPE, ROLES } from "../types";
 import { Button, Tag, Tooltip } from "antd";
 import { RiDeleteBin7Line } from "react-icons/ri";
 import { LiaEditSolid } from "react-icons/lia";
@@ -19,22 +19,6 @@ export const SidebarItems = [
   { title: "Users", link: "users", icon: <FaUsers /> },
   { title: "Profile", link: "profile", icon: <CgProfile /> },
 ]
-
-export const data: MonthlyReportItem[] = [
-  { month: "Jan", sales: 500 },
-  { month: "Feb", sales: 700 },
-  { month: "Mar", sales: 800 },
-  { month: "Apr", sales: 900 },
-  { month: "May", sales: 1000 },
-  { month: "Jun", sales: 200 },
-];
-
-export const mostUsedServicesData: MostUsedService[] = [
-  { service: "Manikyur", percent: 40 },
-  { service: "Makiyaj", percent: 20 },
-  { service: "Stilist", percent: 10 },
-  { service: "Designer", percent: 30 },
-];
 
 export const userTableColumns = (dispatch: AppDispatch, handleDelete: (id: number) => void, page: number) =>
   [
