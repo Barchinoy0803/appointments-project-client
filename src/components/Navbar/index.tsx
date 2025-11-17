@@ -27,7 +27,9 @@ const Navbar = () => {
             {
                 !hideSearch &&
                 <Search value={value} onChange={(e) => setValue(e.target.value)} placeholder="Search" enterButton style={{ width: 400 }} />
+                
             }
+            <div>test</div>
         </div>
     )
 }
