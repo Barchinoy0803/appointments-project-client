@@ -19,7 +19,7 @@ const baseQueryWithStatusHandling: typeof baseQuery = async (args, api, extraOpt
     const result = await baseQuery(args, api, extraOptions);
 
     if (result?.error?.status === 401 || result?.error?.status === 403) {
-        logout()
+        api.dispatch(logout())
         window.location.href = 'login';
     }
 

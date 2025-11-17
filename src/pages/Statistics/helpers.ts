@@ -13,10 +13,9 @@ export const getAppointmnetReport = (data: MonthlyReportItem[] = []): EChartsOpt
           color: "#555",
         },
       },
-      // ECharts bo'sh chartni render qila olishi uchun
       xAxis: { show: false, type: "category", data: [] },
       yAxis: { show: false },
-      series: [],  // series umuman bo'lmaydi
+      series: [],
     };
   }
 
@@ -44,6 +43,16 @@ export const getMostUsedServices = (data: MostUsedService[] = []): EChartsOption
     trigger: "item",
     formatter: "{a} <br/>{b}: {c} ({d}%)",
   },
+  color: [
+    "#3B82F6", 
+    "#10B981", 
+    "#F59E0B",
+    "#EF4444", 
+    "#8B5CF6", 
+    "#14B8A6",
+    "#F43F5E",
+    "#6366F1",  
+  ],
   legend: {
     orient: "horizontal",
     bottom: 0,

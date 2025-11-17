@@ -7,11 +7,12 @@ import { FaPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux'
 import { setUsersModal } from '../../redux/features/modal.slice'
 import CustomModal from '../../components/Popup'
-import { Button, Form, FormProps, Modal, Pagination, Select, Tooltip } from 'antd';
+import { Button, Form, FormProps, Modal, Pagination, Select, Spin, Tooltip } from 'antd';
 import { RootState } from '../../redux'
 import { getErrors } from './helpers'
 import toast from 'react-hot-toast'
 import { useParamsHook } from '../../hooks/useParamsHook'
+import { LoadingOutlined } from '@ant-design/icons'
 
 const Clients = () => {
     const [form] = Form.useForm<FieldType>();
@@ -23,7 +24,7 @@ const Clients = () => {
     const [role, setRole] = useState<string>("")
     const [ordering, setOrdering] = useState<string>("")
 
-    const { data } = useGetUsersQuery({ offset: (Number(page) - 1) * ITEMS_PER_PAGE, search, role, ordering })
+    const { data, isLoading: userLoading } = useGetUsersQuery({ offset: (Number(page) - 1) * ITEMS_PER_PAGE, search, role, ordering })
     const [createUser, { isLoading }] = useCreateUserMutation()
     const [deleteUser] = useDeleteUserMutation()
     const [updateUser] = useUpdateUserMutation()
@@ -68,6 +69,10 @@ const Clients = () => {
         })
     }
 
+    if (userLoading) return
+    <div className="p-6 text-xl">
+        <Spin indicator={<LoadingOutlined spin />} size="large" />
+    </div>
     return (
         <div>
             <div className='flex gap-5 justify-end p-4 items-center'>
