@@ -3,11 +3,15 @@ import { Input } from 'antd';
 import { useDebounceHook } from '../../hooks/useDebounceHook';
 import { useParamsHook } from '../../hooks/useParamsHook';
 import { hideSearchInput } from '../../constants';
+import { useLocation } from 'react-router-dom';
 
 const { Search } = Input;
 
 const Navbar = () => {
-    const url = window.location.href
+    const { pathname } = useLocation();
+    console.log(location.pathname);
+
+    // const url = window.location.href
 
     const [value, setValue] = useState<string>("")
     const searchValue = useDebounceHook(value)
@@ -15,8 +19,8 @@ const Navbar = () => {
     const { setParam } = useParamsHook()
 
     const hideSearch = useMemo(() => {
-        return hideSearchInput.some((hideUrl) => url.includes(hideUrl))
-    }, [url])
+        return hideSearchInput.some((hideUrl) => pathname.includes(hideUrl))
+    }, [pathname])
 
     useEffect(() => {
         setParam("search", searchValue)
@@ -27,7 +31,7 @@ const Navbar = () => {
             {
                 !hideSearch &&
                 <Search value={value} onChange={(e) => setValue(e.target.value)} placeholder="Search" enterButton style={{ width: 400 }} />
-                
+
             }
             <div>test</div>
         </div>

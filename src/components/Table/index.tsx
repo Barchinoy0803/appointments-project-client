@@ -14,6 +14,7 @@ const CustomTable = <T,>({ data, columns }: CustomTableProps<T>) => {
             dataSource={data} 
             rowKey="id"
             pagination={false}
+            // style={{minHeight: "100vh"}}
             />
             
         </div>
