@@ -37,7 +37,7 @@ const Appointments = () => {
                     />
                 </Tooltip>
             </div>
-            <CustomTable<Appointment> data={Array.isArray(data?.results) ? data.results : []} columns={appointmentTableColumns(Number(page))} />
+            <CustomTable<Appointment> data={Array.isArray(data?.items) ? data.items : []} columns={appointmentTableColumns(Number(page))} />
             <div className='mt-6 flex justify-end'>
                 <Pagination
                     current={Number(page)}

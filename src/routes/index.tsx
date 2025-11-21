@@ -7,6 +7,7 @@ import Service from "../pages/Service"
 import Businesses from "../pages/Business"
 import Login from "../pages/Auth"
 import Private from "../pages/Private"
+import Detail from "../pages/Business/Detail"
 
 const MainRouter = () => {
     return (
@@ -19,6 +20,7 @@ const MainRouter = () => {
                     { path: "appointments", element: <Appointments /> },
                     { path: "services", element: <Service /> },
                     { path: "businesses", element: <Businesses /> },
+                    { path: "business/:id", element: <Detail /> },
                     { path: "users", element: <Clients /> },
                     { index: true, element: <Profile /> },
                     { path: "profile", element: <Profile /> },

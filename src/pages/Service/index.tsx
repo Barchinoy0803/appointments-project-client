@@ -21,7 +21,7 @@ const Services = () => {
     <div>
       <div className='flex gap-5 justify-end p-4 items-center'>
         <Tooltip title="Date">
-          <Select
+          <Select 
             value={ordering}
             onChange={(value) => setOrdering(value)}
             defaultValue=""

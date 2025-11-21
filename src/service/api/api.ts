@@ -8,6 +8,8 @@ const baseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BASE_URL,
     prepareHeaders: (headers, { getState }) => {
         const token = (getState() as RootState).userSlice.token
+        console.log(token);
+
         if (validateToken(token)) {
             headers.set('Authorization', `Bearer ${token}`);
         }

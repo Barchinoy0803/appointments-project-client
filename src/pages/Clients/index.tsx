@@ -101,7 +101,7 @@ const Clients = () => {
                 </Button>
             </div>
 
-            <CustomTable<User> data={Array.isArray(data?.results) ? data.results : []} columns={userTableColumns(dispatch, handleDelete, Number(page))} key={data?.id} />
+            <CustomTable<User> data={Array.isArray(data?.items) ? data.items : []} columns={userTableColumns(dispatch, handleDelete, Number(page))} key={data?.id} />
             <div className='mt-6 flex justify-end'>
                 <Pagination
                     current={Number(page)}

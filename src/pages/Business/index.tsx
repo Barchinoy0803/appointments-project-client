@@ -11,7 +11,7 @@ const Businesses = () => {
   const page = getParam("page") || "1";
   const search = getParam("search") || ""
 
-  const [ordering, setOrdering] = useState<string>("")
+  const [ordering, setOrdering] = useState<string>("") 
   const [type, setType] = useState<string>("")
 
   const { data } = useGetBusinessesQuery({ offset: (Number(page) - 1) * ITEMS_PER_PAGE, ordering, type, search })
@@ -39,7 +39,7 @@ const Businesses = () => {
         </Tooltip>
       </div>
 
-      <CustomTable<Business> data={Array.isArray(data?.results) ? data.results : []} columns={businessTableColumns(Number(page))} />
+      <CustomTable<Business> data={Array.isArray(data?.items) ? data.items : []} columns={businessTableColumns(Number(page))} />
       <div className='mt-6 flex justify-end'>
         <Pagination
           current={Number(page)}

@@ -70,6 +70,15 @@ export const userTableColumns = (dispatch: AppDispatch, handleDelete: (id: numbe
       }
     },
     {
+      title: 'Created',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (date: string) => {
+        return formatDate(date)
+      },
+      sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+    },
+    {
       title: "Actions",
       dataIndex: "id",
       key: "actions",
@@ -89,15 +98,6 @@ export const userTableColumns = (dispatch: AppDispatch, handleDelete: (id: numbe
         </div>
       }
     },
-    {
-      title: 'Created',
-      dataIndex: 'created_at',
-      key: 'created_at',
-      render: (date: string) => {
-        return formatDate(date)
-      },
-      sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
-    },
   ];
 
 export const appointmentTableColumns = (page: number = 1) =>
@@ -115,17 +115,17 @@ export const appointmentTableColumns = (page: number = 1) =>
     },
     {
       title: 'Specialist',
-      dataIndex: ['specialist', 'first_name'],
+      dataIndex: 'specialist_name',
       key: 'specialist',
     },
     {
       title: 'Client',
-      dataIndex: ['client', 'first_name'],
+      dataIndex: 'client_name',
       key: 'client',
     },
     {
       title: 'Service',
-      dataIndex: ['service', 'name'],
+      dataIndex: 'service_name',
       key: 'service',
     },
     {
@@ -190,7 +190,7 @@ export const serviceTableColumns = (page: number = 1) => [
   },
   {
     title: 'Business',
-    dataIndex: ['business', 'name'],
+    dataIndex: 'business_title',
     key: 'business',
   },
   {
@@ -231,7 +231,6 @@ export const businessTableColumns = (page: number = 1) => [
     render: (_value: any, _item: any, index: number) => {
       return <span>
         <span>{index + 1 + (Number(page) - 1) * 10}</span>
-
       </span>;
     },
   },
@@ -239,6 +238,13 @@ export const businessTableColumns = (page: number = 1) => [
     title: 'Title',
     dataIndex: 'name',
     key: 'name',
+    render: (_value: string, record: any) => {
+      return (
+        <a href={`/business/${record.id}`} className="cursor-pointer !text-black hover:!text-[#1677ff]">
+          {record.name}
+        </a>
+      )
+    }
   },
   {
     title: 'Address',
@@ -268,21 +274,6 @@ export const businessTableColumns = (page: number = 1) => [
       }
       return <Tag color={color}>{type.toUpperCase()}</Tag>;
     }
-  },
-  {
-    title: 'Description',
-    dataIndex: 'description',
-    key: 'description',
-  },
-  {
-    title: 'Opening hours',
-    dataIndex: 'opening_hours',
-    key: 'opening_hours',
-  },
-  {
-    title: 'Contact',
-    dataIndex: 'contact',
-    key: 'contact',
   },
   {
     title: 'Created',
@@ -360,4 +351,4 @@ export const typeOptions = [
 
 export const ITEMS_PER_PAGE = 10
 
-export const hideSearchInput = ["statistics", "profile", "appointments"]
+export const hideSearchInput = ["statistics", "profile", "appointments", "business"]
