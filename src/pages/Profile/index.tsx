@@ -14,8 +14,8 @@ const Profile = () => {
   )
 
   return (
-    <div className="w-full p-4">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-8">
+    <div className="w-full py-2 px-3">
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">
         Profile
       </h1>
 
@@ -27,16 +27,16 @@ const Profile = () => {
             className="w-24 h-24 rounded-full object-cover"
           />
         ) : (
-          <div className="w-24 h-24 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-4xl font-semibold text-gray-700 dark:text-gray-300">
+          <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-4xl font-semibold text-gray-700">
             {data?.first_name?.[0]}{data?.last_name?.[0]}
           </div>
         )}
 
         <div>
-          <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          <p className="text-2xl font-semibold text-gray-900">
             {data?.first_name} {data?.last_name}
           </p>
-          <p className="text-gray-500 dark:text-gray-400 capitalize">
+          <p className="text-gray-500 capitalize">
             {data?.role}
           </p>
         </div>
@@ -45,8 +45,8 @@ const Profile = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
         <div className="flex flex-col gap-2">
-          <span className="text-gray-500 dark:text-gray-400 text-sm">Phone Number</span>
-          <span className="text-lg text-gray-900 dark:text-gray-100">
+          <span className="text-gray-500 text-sm">Phone Number</span>
+          <span className="text-lg text-gray-900">
             {data?.phone_number}
           </span>
         </div>
@@ -54,8 +54,8 @@ const Profile = () => {
 
 
         <div className="flex flex-col gap-2">
-          <span className="text-gray-500 dark:text-gray-400 text-sm">Created At</span>
-          <span className="text-lg text-gray-900 dark:text-gray-100">
+          <span className="text-gray-500 text-sm">Created At</span>
+          <span className="text-lg text-gray-900">
             {new Date(data?.created_at).toLocaleString()}
           </span>
         </div>
