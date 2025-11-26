@@ -1,4 +1,3 @@
-import React from 'react'
 import { useGetOneServicesQuery } from '../../service/api/service.api'
 import { useParams } from 'react-router-dom'
 
