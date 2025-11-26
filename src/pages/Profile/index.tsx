@@ -6,10 +6,12 @@ import { LoadingOutlined } from '@ant-design/icons';
 const Profile = () => {
   const { data, isLoading } = useGetMeQuery({})
 
-  if (isLoading) return 
-  <div className="p-6 text-xl">
-    <Spin indicator={<LoadingOutlined spin />} size="large" />
-  </div>
+  if (isLoading) return
+  (
+    <div className="p-6 text-xl">
+      <Spin indicator={<LoadingOutlined spin />} size="large" />
+    </div>
+  )
 
   return (
     <div className="w-full p-4">
@@ -49,7 +51,7 @@ const Profile = () => {
           </span>
         </div>
 
-       
+
 
         <div className="flex flex-col gap-2">
           <span className="text-gray-500 dark:text-gray-400 text-sm">Created At</span>
