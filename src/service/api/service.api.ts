@@ -9,9 +9,16 @@ const extendedApi = mainApi.injectEndpoints({
                 params
             }),
             providesTags: ['SERVICE']
+        }),
+        getOneServices: build.query({
+            query: (id) => ({
+                method: "GET",
+                url: `/admin/services/${id}`,
+            }),
+            providesTags: ['SERVICE']
         })
     }),
     overrideExisting: false
 })
 
-export const { useGetServicesQuery } = extendedApi;
+export const { useGetServicesQuery, useGetOneServicesQuery } = extendedApi;

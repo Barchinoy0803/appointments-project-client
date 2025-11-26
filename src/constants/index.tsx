@@ -8,7 +8,7 @@ import { Button, Tag, Tooltip } from "antd";
 import { RiDeleteBin7Line } from "react-icons/ri";
 import { LiaEditSolid } from "react-icons/lia";
 import { AppDispatch } from "../redux";
-import { setUsersModal } from "../redux/features/modal.slice";
+import { setBusinessModal, setUsersModal } from "../redux/features/modal.slice";
 import { formatDate } from "../helpers";
 
 export const SidebarItems = [
@@ -182,11 +182,11 @@ export const serviceTableColumns = (page: number = 1) => [
     title: 'Title',
     dataIndex: 'name',
     key: 'name',
-  },
-  {
-    title: 'Description',
-    dataIndex: 'description',
-    key: 'description',
+    render: (_value: string, record: any) => {
+      return (
+        <a href={`/service/${record.id}`} className="cursor-pointer !text-black hover:!text-[#1677ff]">{record.name}</a>
+      )
+    }
   },
   {
     title: 'Business',
@@ -223,7 +223,7 @@ export const serviceTableColumns = (page: number = 1) => [
 
 ]
 
-export const businessTableColumns = (page: number = 1) => [
+export const businessTableColumns = (dispatch: AppDispatch, handleDelete: (id: number) => void, page: number = 1) => [
   {
     title: "№",
     dataIndex: "index",
@@ -284,7 +284,26 @@ export const businessTableColumns = (page: number = 1) => [
     },
     sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
   },
+  {
+    title: "Actions",
+    dataIndex: "id",
+    key: "actions",
+    render: (id: number) => {
+      return <div className="flex gap-3">
+        <Tooltip title="Delete">
+          <Button onClick={() => handleDelete(id)} type="text" shape="circle">
+            <RiDeleteBin7Line className="text-[20px] text-red-400" />
+          </Button>
+        </Tooltip>
 
+        <Tooltip title="Edit">
+          <Button onClick={() => dispatch(setBusinessModal({ isOpen: true, type: ACTIONS.EDIT, id }))} type="text" shape="circle">
+            <LiaEditSolid className="text-[20px] text-orange-400" />
+          </Button>
+        </Tooltip>
+      </div>
+    }
+  },
 ]
 
 export const roleOptions = [

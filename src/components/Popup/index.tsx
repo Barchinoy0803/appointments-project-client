@@ -17,7 +17,7 @@ interface CustomModalProps {
 }
 
 const CustomModal = ({ onFinish,  loading, form }: CustomModalProps) => {
-    const { isOpen, type, id } = useSelector((state: RootState) => state.modalSlice.usersModal)
+    const { isOpen, type, id } = useSelector((state: RootState) => state.modal.usersModal)
     const dispatch = useDispatch()
 
     const { data: userData } = useGetOneUserQuery(id ?? skipToken)

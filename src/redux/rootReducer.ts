@@ -4,7 +4,7 @@ import modalSlice from './features/modal.slice';
 import userSlice from './features/user.slice';
 
 export const rootReducer = combineReducers({
-  modalSlice,
+  modal: modalSlice,
   userSlice,
   [mainApi.reducerPath]: mainApi.reducer,
 });

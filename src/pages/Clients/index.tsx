@@ -30,7 +30,7 @@ const Clients = () => {
     const [updateUser] = useUpdateUserMutation()
 
     const dispatch = useDispatch()
-    const { type, id } = useSelector((state: RootState) => state.modalSlice.usersModal)
+    const { type, id } = useSelector((state: RootState) => state.modal.usersModal)
 
     const handleOpenModal = () => {
         dispatch(setUsersModal({ isOpen: true, type: ACTIONS.CREATE }))
@@ -102,7 +102,7 @@ const Clients = () => {
             </div>
 
             <CustomTable<User> data={Array.isArray(data?.items) ? data.items : []} columns={userTableColumns(dispatch, handleDelete, Number(page))} key={data?.id} />
-            <div className='mt-6 flex justify-end'>
+            <div className='mt-6 flex justify-end fixed bottom-10 right-20'>
                 <Pagination
                     current={Number(page)}
                     onChange={(value) => setParam("page", value.toString())}

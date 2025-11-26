@@ -2,7 +2,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ModalType } from "../../types";
 
 export interface ModalState {
-    usersModal: ModalType
+    usersModal: ModalType,
+    locationModal: ModalType,
+    businessModal: ModalType
 }
 
 export const defaultModalState = {
@@ -10,7 +12,9 @@ export const defaultModalState = {
 }
 
 const initialState: ModalState = {
-    usersModal: defaultModalState
+    usersModal: defaultModalState,
+    locationModal: defaultModalState,
+    businessModal: defaultModalState
 }
 
 export const modalSlice = createSlice({
@@ -19,9 +23,15 @@ export const modalSlice = createSlice({
     reducers: {
         setUsersModal(state, action: PayloadAction<ModalType>) {
             state.usersModal = action.payload
+        },
+        setLocationModal(state, action: PayloadAction<ModalType>) {
+            state.locationModal = action.payload
+        },
+        setBusinessModal(state, action: PayloadAction<ModalType>) {
+            state.businessModal = action.payload
         }
     }
 })
 
-export const { setUsersModal } = modalSlice.actions
+export const { setUsersModal, setLocationModal, setBusinessModal } = modalSlice.actions
 export default modalSlice.reducer

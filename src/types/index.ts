@@ -48,6 +48,7 @@ export interface Business {
     longitude: string;
     contact: string;
     opening_hours: string;
+    is_active: boolean;
 }
 
 export interface ModalType {
