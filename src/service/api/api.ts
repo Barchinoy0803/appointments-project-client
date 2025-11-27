@@ -6,10 +6,8 @@ import { logout } from '../../redux/features/user.slice';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BASE_URL,
-    // credentials: "include",
     prepareHeaders: (headers, { getState }) => {
         const token = (getState() as RootState).userSlice.token
-        console.log(token);
 
         if (validateToken(token)) {
             headers.set('Authorization', `Bearer ${token}`);
