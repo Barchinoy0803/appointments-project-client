@@ -43,15 +43,12 @@ const Profile = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
         <div className="flex flex-col gap-2">
           <span className="text-gray-500 text-sm">Phone Number</span>
           <span className="text-lg text-gray-900">
             {data?.phone_number}
           </span>
         </div>
-
-
 
         <div className="flex flex-col gap-2">
           <span className="text-gray-500 text-sm">Created At</span>

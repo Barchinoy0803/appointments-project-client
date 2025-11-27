@@ -30,6 +30,9 @@ export interface Appointment {
     specialist: User;
     client: User;
     service: Service;
+    client_name: string;
+    specialist_name: string;
+    service_name: string;
 }
 
 export interface Service {

@@ -4,11 +4,13 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux";
 import { setLocationModal } from "../../redux/features/modal.slice";
+import { defaultIcon } from "../../constants";
 
 interface LocationPickerProps {
     position: number,
     setPosition: Dispatch<SetStateAction<[number, number] | null>>
 }
+
 
 export const LocationPicker = ({ position, setPosition }: LocationPickerProps) => {
     const { isOpen } = useSelector((state: RootState) => state.modal.locationModal)
@@ -34,7 +36,7 @@ export const LocationPicker = ({ position, setPosition }: LocationPickerProps) =
             },
         });
 
-        return position ? <Marker position={position as any} /> : null;
+        return position ? <Marker position={position as any} icon={defaultIcon}/> : null;
     }
 
     return (
