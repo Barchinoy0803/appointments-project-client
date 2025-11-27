@@ -11,7 +11,6 @@ import { AppDispatch } from "../redux";
 import { setBusinessModal, setUsersModal } from "../redux/features/modal.slice";
 import { formatDate } from "../helpers";
 import L from "leaflet";
-import locationIcon from "../assets/locationIcon.png"
 
 export const SidebarItems = [
   { title: "Statistics", link: "statistics", icon: <IoStatsChart /> },
@@ -375,8 +374,8 @@ export const ITEMS_PER_PAGE = 10
 export const hideSearchInput = ["statistics", "profile", "appointments", "business"]
 
 export const defaultIcon = new L.Icon({
-    iconUrl: locationIcon,
-    iconRetinaUrl: locationIcon,
+    iconUrl: "/icons/marker.png",
+    iconRetinaUrl: "/icons/marker.png",
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
