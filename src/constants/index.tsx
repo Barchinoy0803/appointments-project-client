@@ -382,3 +382,4 @@ export const defaultIcon = new L.Icon({
     shadowSize: [41, 41],
 });
 L.Marker.prototype.options.icon = defaultIcon;
+
