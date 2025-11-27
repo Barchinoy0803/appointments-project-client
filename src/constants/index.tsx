@@ -374,8 +374,8 @@ export const ITEMS_PER_PAGE = 10
 export const hideSearchInput = ["statistics", "profile", "appointments", "business"]
 
 export const defaultIcon = new L.Icon({
-    iconUrl: "/icons/marker.png",
-    iconRetinaUrl: "/icons/marker.png",
+    iconUrl: `${import.meta.env.VITE_BASE_URL}icons/marker.png`,
+    iconRetinaUrl: `${import.meta.env.VITE_BASE_URL}icons/marker.png`,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
