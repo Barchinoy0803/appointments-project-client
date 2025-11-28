@@ -7,12 +7,11 @@ import { FaPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux'
 import { setUsersModal } from '../../redux/features/modal.slice'
 import CustomModal from '../../components/Popup'
-import { Button, Form, FormProps, Modal, Pagination, Select, Spin, Tooltip } from 'antd';
+import { Button, Form, FormProps, Modal, Pagination, PaginationProps, Select, Spin, Tooltip } from 'antd';
 import { RootState } from '../../redux'
 import { getErrors } from './helpers'
 import toast from 'react-hot-toast'
 import { useParamsHook } from '../../hooks/useParamsHook'
-import { LoadingOutlined } from '@ant-design/icons'
 
 const Clients = () => {
     const [form] = Form.useForm<FieldType>();
@@ -20,11 +19,13 @@ const Clients = () => {
     const { getParam, setParam } = useParamsHook();
     const page = getParam("page") || "1"
     const search = getParam("search") || ""
+    setParam("limit", 10)
 
     const [role, setRole] = useState<string>("")
     const [ordering, setOrdering] = useState<string>("")
+    const [pageSize, setPageSize] = useState<number>(ITEMS_PER_PAGE)
 
-    const { data, isLoading: userLoading } = useGetUsersQuery({ offset: (Number(page) - 1) * ITEMS_PER_PAGE, search, role, ordering })
+    const { data, isLoading: userLoading } = useGetUsersQuery({ limit: pageSize, page, search, role, ordering })
     const [createUser, { isLoading }] = useCreateUserMutation()
     const [deleteUser] = useDeleteUserMutation()
     const [updateUser] = useUpdateUserMutation()
@@ -67,50 +68,66 @@ const Clients = () => {
                 }
             }
         })
+    };
+
+    const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
+        setPageSize(pageSize)
+        setParam("page", current)
+        setParam("limit", pageSize)
+    };
+
+    const onChange = (current: number) => {
+        setParam('page', current)
     }
 
-    if (userLoading) return
-    <div className="p-6 text-xl">
-        <Spin indicator={<LoadingOutlined spin />} size="large" />
-    </div>
     return (
         <div>
-            <div className='flex gap-5 justify-end p-4 items-center'>
-                <Tooltip title="Date">
-                    <Select
-                        value={ordering}
-                        onChange={(value) => setOrdering(value)}
-                        defaultValue=""
-                        style={{ width: 160 }}
-                        options={[{ value: "", label: "All" }, ...orderOptions]}
-                    />
-                </Tooltip>
-                <Tooltip title="Role">
-                    <Select
-                        value={role}
-                        onChange={(value) => setRole(value)}
-                        defaultValue=""
-                        style={{ width: 160 }}
-                        options={[{ value: "", label: "All" }, ...roleOptions]}
-                    />
-                </Tooltip>
+            {
+                userLoading ? <div className="flex justify-center p-6 text-xl">
+                    <Spin size="large" />
+                </div>
+                    :
+                    <>
+                        <div className='flex gap-5 justify-end p-4 items-center'>
+                            <Tooltip title="Date">
+                                <Select
+                                    value={ordering}
+                                    onChange={(value) => setOrdering(value)}
+                                    defaultValue=""
+                                    style={{ width: 160 }}
+                                    options={[{ value: "", label: "All" }, ...orderOptions]}
+                                />
+                            </Tooltip>
+                            <Tooltip title="Role">
+                                <Select
+                                    value={role}
+                                    onChange={(value) => setRole(value)}
+                                    defaultValue=""
+                                    style={{ width: 160 }}
+                                    options={[{ value: "", label: "All" }, ...roleOptions]}
+                                />
+                            </Tooltip>
 
 
-                <Button onClick={handleOpenModal} type="default" icon={<FaPlus />} iconPosition={'start'}>
-                    Add
-                </Button>
-            </div>
+                            <Button onClick={handleOpenModal} type="default" icon={<FaPlus />} iconPosition={'start'}>
+                                Add
+                            </Button>
+                        </div>
 
-            <CustomTable<User> data={Array.isArray(data?.items) ? data.items : []} columns={userTableColumns(dispatch, handleDelete, Number(page))} key={data?.id} />
-            <div className='mt-6 flex justify-end fixed bottom-10 right-20'>
-                <Pagination
-                    current={Number(page)}
-                    onChange={(value) => setParam("page", value.toString())}
-                    pageSize={ITEMS_PER_PAGE}
-                    total={data?.count}
-                />
-            </div>
-            <CustomModal onFinish={onFinish} loading={isLoading} form={form} />
+                        <CustomTable<User> data={Array.isArray(data?.items) ? data.items : []} columns={userTableColumns(dispatch, handleDelete, Number(page))} key={data?.id} />
+                        <div className='mt-6 flex justify-end fixed bottom-10 right-20'>
+                            <Pagination
+                                showSizeChanger
+                                onShowSizeChange={onShowSizeChange}
+                                defaultCurrent={1}
+                                total={data?.totalCount}
+                                onChange={onChange}
+                                disabled={userLoading}
+                            />
+                        </div>
+                        <CustomModal onFinish={onFinish} loading={isLoading} form={form} />
+                    </>
+            }
         </div>
     )
 }

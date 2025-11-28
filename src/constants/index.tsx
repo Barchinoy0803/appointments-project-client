@@ -19,7 +19,7 @@ export const SidebarItems = [
   { title: "Businesses", link: "businesses", icon: <MdHomeRepairService /> },
   { title: "Users", link: "users", icon: <FaUsers /> },
   { title: "Profile", link: "profile", icon: <CgProfile /> },
-]
+];
 
 export const userTableColumns = (dispatch: AppDispatch, handleDelete: (id: number) => void, page: number) =>
   [
@@ -99,7 +99,7 @@ export const userTableColumns = (dispatch: AppDispatch, handleDelete: (id: numbe
         </div>
       }
     },
-  ];
+];
 
 export const appointmentTableColumns = (page: number = 1) =>
   [
@@ -165,7 +165,7 @@ export const appointmentTableColumns = (page: number = 1) =>
       },
       sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
     },
-  ];
+];
 
 export const serviceTableColumns = (page: number = 1) => [
   {
@@ -222,7 +222,7 @@ export const serviceTableColumns = (page: number = 1) => [
     sorter: (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
   },
 
-]
+];
 
 export const businessTableColumns = (dispatch: AppDispatch, handleDelete: (id: number) => void, page: number = 1) => [
   {
@@ -305,7 +305,7 @@ export const businessTableColumns = (dispatch: AppDispatch, handleDelete: (id: n
       </div>
     }
   },
-]
+];
 
 export const roleOptions = [
   {
@@ -325,7 +325,7 @@ export const roleOptions = [
 export const orderOptions = [
   { value: '-created_at', label: 'Newest first' },
   { value: 'created_at', label: 'Oldest first' },
-]
+];
 
 export const statusOptions = [
   {
@@ -343,7 +343,7 @@ export const statusOptions = [
   {
     label: "Moved", value: APPOINTMENT_STATUS.MOVED
   }
-]
+];
 
 export const activeOptions = [
   {
@@ -352,7 +352,7 @@ export const activeOptions = [
   {
     label: "Inactive", value: false,
   },
-]
+];
 
 export const typeOptions = [
   {
@@ -367,11 +367,11 @@ export const typeOptions = [
   {
     label: "Sport", value: BUSINESS_TYPE.SPORT
   },
-]
+];
 
-export const ITEMS_PER_PAGE = 10
+export const ITEMS_PER_PAGE = 10;
 
-export const hideSearchInput = ["statistics", "profile", "appointments", "business"]
+export const hideSearchInput = ["statistics", "profile", "appointments", "business"];
 
 export const defaultIcon = new L.Icon({
     iconUrl: `${import.meta.env.BASE_URL}icons/marker.png`,
@@ -382,4 +382,3 @@ export const defaultIcon = new L.Icon({
     shadowSize: [41, 41],
 });
 L.Marker.prototype.options.icon = defaultIcon;
-

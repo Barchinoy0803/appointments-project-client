@@ -10,7 +10,6 @@ interface LocationPickerProps {
     setPosition: Dispatch<SetStateAction<[number, number] | null>>
 }
 
-
 export const LocationPicker = ({ position, setPosition }: LocationPickerProps) => {
     const { isOpen } = useSelector((state: RootState) => state.modal.locationModal)
 

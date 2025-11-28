@@ -1,19 +1,19 @@
 import { useGetOneServicesQuery } from '../../service/api/service.api'
 import { useParams } from 'react-router-dom'
 import { Tabs, Card, Tag, Empty, Spin, Badge } from 'antd'
-import { 
-  CalendarOutlined, 
-  UserOutlined, 
-  TeamOutlined, 
-  ClockCircleOutlined 
+import {
+  CalendarOutlined,
+  UserOutlined,
+  TeamOutlined,
+  ClockCircleOutlined
 } from '@ant-design/icons'
 import { Appointment } from '../../types'
 import { getStatusColor, getStatusText } from './helpers'
+import { formatDate } from '../../helpers'
 
 const ServiceDetail = () => {
   const { id } = useParams()
   const { data, isLoading } = useGetOneServicesQuery(id)
-
 
   if (isLoading) {
     return (
@@ -24,36 +24,38 @@ const ServiceDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            {data?.name || 'Service Details'}
+    <div className="h-full bg-gray-50 p-6">
+      <div className="">
+        <div className="flex flex-col gap-4 bg-white rounded-lg shadow-sm p-4 mb-6">
+          <h1 className="text-3xl font-bold text-gray-800">
+            {data?.name}
           </h1>
-          {data?.description && (
-            <p className="text-gray-600">{data.description}</p>
-          )}
+          <div className='flex items-center gap-2 text-gray-500'>
+            <ClockCircleOutlined className="text-purple-500" />
+            <p>{formatDate(data?.created_at)}</p>
+          </div>
+          <p className="text-gray-600">{data?.description}</p>
+          <Tag className='w-[max-content]' color={data?.is_active ? "green" : "red"}>{data?.is_active ? "Active" : "Inactive"}</Tag>
         </div>
 
-        {/* Tabs */}
         <Card className="shadow-sm">
           <Tabs defaultActiveKey="1" size="large">
-            <Tabs.TabPane 
+            <Tabs.TabPane
               tab={
                 <span className="flex items-center gap-2">
                   <CalendarOutlined />
                   Appointments
-                  <Badge 
-                    count={data?.appointments?.length || 0} 
+                  <Badge
+                    color='orange'
+                    count={data?.appointments?.length || 0}
                     className="ml-2"
                     showZero
                   />
                 </span>
-              } 
+              }
               key="1"
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+              <div className="flex flex-col gap-4 mt-4">
                 {data?.appointments && data.appointments.length > 0 ? (
                   data.appointments.map((appointment: Appointment) => (
                     <Card
@@ -62,19 +64,6 @@ const ServiceDetail = () => {
                       hoverable
                     >
                       <div className="space-y-3">
-                        {/* Status Badge */}
-                        <div className="flex justify-between items-start">
-                          <Tag color={getStatusColor(appointment.status)} className="text-sm">
-                            {getStatusText(appointment.status)}
-                          </Tag>
-                          {/* {appointment.date && (
-                            <span className="text-xs text-gray-500">
-                              {new Date(appointment.date).toLocaleDateString()}
-                            </span>
-                          )} */}
-                        </div>
-
-                        {/* Client Info */}
                         <div className="flex items-center gap-2">
                           <UserOutlined className="text-blue-500" />
                           <div>
@@ -85,7 +74,6 @@ const ServiceDetail = () => {
                           </div>
                         </div>
 
-                        {/* Specialist Info */}
                         <div className="flex items-center gap-2">
                           <TeamOutlined className="text-green-500" />
                           <div>
@@ -96,32 +84,23 @@ const ServiceDetail = () => {
                           </div>
                         </div>
 
-                        {/* Service Info */}
-                        <div className="flex items-center gap-2">
-                          <ClockCircleOutlined className="text-purple-500" />
-                          <div>
-                            <p className="text-xs text-gray-500">Service</p>
-                            <p className="font-medium text-gray-700">
-                              {appointment.service_name}
-                            </p>
-                          </div>
+                        <div className="flex justify-between items-start">
+                          <Tag color={getStatusColor(appointment.status)} className="text-sm">
+                            {getStatusText(appointment.status)}
+                          </Tag>
+                          {appointment.created_at && (
+                            <span className="text-xs text-gray-500">
+                              {new Date(appointment.created_at).toLocaleDateString()}
+                            </span>
+                          )}
                         </div>
-
-                        {/* Time */}
-                        {/* {appointment.crea && (
-                          <div className="pt-2 border-t border-gray-100">
-                            <p className="text-sm text-gray-600">
-                              <ClockCircleOutlined className="mr-1" />
-                              {appointment.time}
-                            </p>
-                          </div>
-                        )} */}
                       </div>
+
                     </Card>
                   ))
                 ) : (
                   <div className="col-span-full">
-                    <Empty 
+                    <Empty
                       description="No appointments found"
                       className="py-12"
                     />
@@ -130,20 +109,64 @@ const ServiceDetail = () => {
               </div>
             </Tabs.TabPane>
 
-            <Tabs.TabPane 
+            <Tabs.TabPane
               tab={
                 <span className="flex items-center gap-2">
                   <TeamOutlined />
-                  Specialists
+                  Specialists 
+                  <Badge
+                    color='green'
+                    count={data?.specialists?.length || 0}
+                    className="ml-2"
+                    showZero
+                  />
                 </span>
-              } 
+              }
               key="2"
             >
-              <div className="py-12">
-                <Empty 
-                  description="Specialists content coming soon"
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                />
+              <div className="">
+                {
+                  data?.specialists?.map((specialist: any) => (
+                    <div className='w-full flex shadow rounded p-6 mb-4 hover:shadow-lg transition-shadow duration-300 border-gray-300'>
+                      <div className='w-full flex  justify-between'>
+                        <div>
+                          <p className="text-xs text-gray-500">First name</p>
+                          <p className="font-semibold text-gray-800">
+                            {specialist.specialist.first_name}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-500">Last name</p>
+                          <p className="font-semibold text-gray-800">
+                            {specialist.specialist.last_name}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-500">Phone number</p>
+                          <p className="font-semibold text-gray-800">
+                            {specialist.specialist.phone_number}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-500">Position</p>
+                          <p className="font-semibold text-gray-800">
+                            {specialist.position}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-500">Experience</p>
+                          <p className="font-semibold text-gray-800">
+                            {specialist.years_of_experience}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                }
               </div>
             </Tabs.TabPane>
           </Tabs>

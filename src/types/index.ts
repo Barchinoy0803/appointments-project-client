@@ -14,7 +14,7 @@ export interface DataType {
     phoneNumber: string;
     address: string;
     tags: string;
-}
+};
 
 export interface User {
     id: number;
@@ -22,7 +22,7 @@ export interface User {
     last_name: string;
     phone_number: string;
     unhashed_password: string;
-}
+};
 
 export interface Appointment {
     id: number;
@@ -33,14 +33,15 @@ export interface Appointment {
     client_name: string;
     specialist_name: string;
     service_name: string;
-}
+    created_at: string
+};
 
 export interface Service {
     name: string;
     description: string;
     is_active: boolean;
     business: Business;
-}
+};
 
 export interface Business {
     name: string;
@@ -52,25 +53,25 @@ export interface Business {
     contact: string;
     opening_hours: string;
     is_active: boolean;
-}
+};
 
 export interface ModalType {
     id?: number;
     isOpen: boolean;
     type?: ACTIONS;
-}
+};
 
 export enum ACTIONS {
     EDIT = "EDIT",
     DELETE = "DELETE",
     CREATE = "CREATE"
-}
+};
 
 export enum ROLES {
     ADMIN = "admin",
     CLIENT = "client",
     SPECIALIST = "specialist"
-}
+};
 
 export enum APPOINTMENT_STATUS {
     PENDING = "pending",
@@ -78,14 +79,14 @@ export enum APPOINTMENT_STATUS {
     REJECTED = "rejected",
     CANCELED = "canceled",
     MOVED = "moved "
-}
+};
 
 export enum BUSINESS_TYPE {
     CLINIC = "clinic",
     BARBERSHOP = "barbershop",
     BEAUTY_SHOP = "beautyshop",
     SPORT = "sport"
-}
+};
 
 export type FieldType = {
     first_name: string;
@@ -98,12 +99,12 @@ export type FieldType = {
 export type ParamsType = {
     limit: number;
     offset: number
-}
+};
 
 export type LoginType = {
     phone_number: string;
     password: string;
-}
+};
 
 export interface LoginData {
     data: {
@@ -113,4 +114,4 @@ export interface LoginData {
             refresh: string;
         }
     }
-}
+};
