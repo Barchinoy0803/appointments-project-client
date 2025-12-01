@@ -10,7 +10,7 @@ const Dashboard = () => {
 
             <div className='flex flex-col flex-1 bg-white'>
                 <Navbar />
-                <div  className='flex-1 bg-gray-100 p-4'>
+                <div  className='flex-1 h-full overflow-y-auto bg-gray-100 p-4'>
                     <Outlet />
                 </div>
             </div>

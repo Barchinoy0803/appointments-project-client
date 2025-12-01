@@ -8,6 +8,16 @@ export type MostUsedService = {
     total: number;
 };
 
+export type GetTopClient = {
+    client_name: string;
+    total_appointments: string;
+}
+
+export type GetTopSpecialist = {
+    specialist_name: string;
+    total_appointments: string;
+};
+
 export interface DataType {
     key: string;
     name: string;

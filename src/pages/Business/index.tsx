@@ -4,7 +4,7 @@ import { ACTIONS, Business } from '../../types'
 import { useCreateBusinessMutation, useDeleteBusinessMutation, useGetBusinessesQuery, useUpdateBusinessMutation } from '../../service/api/business.api'
 import { businessTableColumns, ITEMS_PER_PAGE, orderOptions, typeOptions } from '../../constants'
 import { useParamsHook } from '../../hooks/useParamsHook'
-import { Button, Form, FormProps, Modal, Pagination, PaginationProps, Select, Spin, Tooltip } from 'antd'
+import { Button, Form, FormProps, Modal, Pagination, PaginationProps, Select, Tooltip } from 'antd'
 import { FaPlus } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { getErrors } from '../Clients/helpers'
@@ -13,6 +13,7 @@ import BusinessModal from '../../components/BusinessModal'
 import { RootState } from '../../redux'
 import { setBusinessModal } from '../../redux/features/modal.slice'
 import { getBusinessBody } from './helpers'
+import Loading from '../../components/Loading'
 
 const Businesses = () => {
   const [form] = Form.useForm<Business>();
@@ -89,12 +90,10 @@ const Businesses = () => {
   };
 
   return (
-    <div>
+    <div className='h-full'>
       {
         businessLoading ?
-          <div className="flex items-center justify-center min-h-[800px]">
-            <Spin size="large" />
-          </div>
+          <Loading/>
           :
           <>
             <div className='flex gap-5 justify-end p-4 items-center'>

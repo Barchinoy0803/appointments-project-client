@@ -7,11 +7,12 @@ import { FaPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux'
 import { setUsersModal } from '../../redux/features/modal.slice'
 import CustomModal from '../../components/Popup'
-import { Button, Form, FormProps, Modal, Pagination, PaginationProps, Select, Spin, Tooltip } from 'antd';
+import { Button, Form, FormProps, Modal, Pagination, PaginationProps, Select, Tooltip } from 'antd';
 import { RootState } from '../../redux'
 import { getErrors } from './helpers'
 import toast from 'react-hot-toast'
 import { useParamsHook } from '../../hooks/useParamsHook'
+import Loading from '../../components/Loading'
 
 const Clients = () => {
     const [form] = Form.useForm<FieldType>();
@@ -87,12 +88,10 @@ const Clients = () => {
     };
 
     return (
-        <div>
+        <div className='h-full'>
             {
                 userLoading ?
-                    <div className="flex items-center justify-center min-h-[800px]">
-                        <Spin size="large" />
-                    </div>
+                    <Loading />
                     :
                     <>
                         <div className='flex gap-5 justify-end p-4 items-center'>

@@ -1,6 +1,6 @@
 import { useGetOneBusinessesQuery } from '../../service/api/business.api'
 import { useParams } from 'react-router-dom'
-import { Badge, Pagination, Spin, Tag, Typography } from 'antd'
+import { Badge, Pagination, Tag, Typography } from 'antd'
 import { MdHomeRepairService } from 'react-icons/md'
 import CustomTable from '../../components/Table'
 import { Service } from '../../types'
@@ -10,6 +10,7 @@ import { TbCalendarTime } from "react-icons/tb";
 import { FaPhone } from "react-icons/fa6";
 import { formatDate } from '../../helpers'
 import Map from '../../components/Map'
+import Loading from '../../components/Loading'
 
 const Detail = () => {
   const { getParam, setParam } = useParamsHook();
@@ -21,7 +22,8 @@ const Detail = () => {
     <div className='flex flex-col gap-6 w-full h-full shadow bg-white rounded p-5'>
       {
         isLoading ?
-          <Spin size='large' /> :
+          <Loading />
+          :
           <>
             <div className='flex flex-col gap-2'>
               <div className='flex justify-between items-center'>
@@ -50,7 +52,7 @@ const Detail = () => {
                   <p>{data?.contact}</p>
                 </div>
 
-                 <div>
+                <div>
                   <Tag color='orange'>{data?.type}</Tag>
                 </div>
               </div>

@@ -1,17 +1,15 @@
 import { memo } from 'react'
 import { useGetMeQuery } from '../../service/api/auth.api'
-import { Spin } from 'antd'
+import Loading from '../../components/Loading'
 
 const Profile = () => {
   const { data, isLoading } = useGetMeQuery({})
 
   return (
-    <div className="w-full py-2 px-3">
+    <div className="w-full h-full py-2 px-3">
       {
         isLoading ?
-          <div className="flex items-center justify-center min-h-[800px]">
-            <Spin size="large" />
-          </div>
+          <Loading/>
           :
           <>
             <h1 className="text-3xl font-bold text-gray-900 mb-8">

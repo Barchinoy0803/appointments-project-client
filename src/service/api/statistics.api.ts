@@ -14,9 +14,21 @@ const extendedApi = mainApi.injectEndpoints({
                 url: "/statistics/",
                 params
             })
+        }),
+        getTopClients: build.query({
+            query: () => ({
+                method: "GET",
+                url: "/top-clients/",
+            })
+        }),
+        getTopSpecialists: build.query({
+            query: () => ({
+                method: "GET",
+                url: "/top-specialists"
+            })
         })
     }),
     overrideExisting: false
 });
 
-export const { useGetTopServicesQuery, useGetAppointmentsByDateQuery } = extendedApi;
+export const { useGetTopServicesQuery, useGetAppointmentsByDateQuery, useGetTopClientsQuery, useGetTopSpecialistsQuery } = extendedApi;

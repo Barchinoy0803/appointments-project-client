@@ -1,51 +1,96 @@
 import { memo, useState } from "react";
 import Charts from "../../components/Charts";
-import { getAppointmnetReport, getMostUsedServices, getToday } from "./helpers";
-import { useGetAppointmentsByDateQuery, useGetTopServicesQuery } from "../../service/api/statistics.api";
-import { DatePickerProps, Spin, Typography } from "antd";
-import { DatePicker, Space } from 'antd';
+import {
+    getAppointmnetReport,
+    getMostUsedServices,
+    getToday,
+    getTopClients,
+    getTopSpecialists
+} from "./helpers";
+import {
+    useGetAppointmentsByDateQuery,
+    useGetTopClientsQuery,
+    useGetTopServicesQuery,
+    useGetTopSpecialistsQuery
+} from "../../service/api/statistics.api";
+import { DatePickerProps, Typography, DatePicker, Space } from "antd";
 import dayjs from "dayjs";
+import Loading from "../../components/Loading";
 
 const Statistics = () => {
-    const [start, setStartDate] = useState<string | string[]>("")
-    const [end, setEndDate] = useState<string | string[]>("")
+    const [start, setStartDate] = useState<string>("");
+    const [end, setEndDate] = useState<string>("");
 
-    const { data: topServiceData, isLoading } = useGetTopServicesQuery({})
-    const { data: appointmentsData } = useGetAppointmentsByDateQuery({ start: start || getToday(), end })
+    const { data: topServiceData, isLoading } = useGetTopServicesQuery({});
+    const { data: appointmentsData } = useGetAppointmentsByDateQuery({
+        start: start || getToday(),
+        end,
+    });
+    const { data: topClients } = useGetTopClientsQuery({});
+    const { data: topSpecialists } = useGetTopSpecialistsQuery({});
 
-    const onChangeStart: DatePickerProps['onChange'] = (_, dateString) => {
-        setStartDate(dateString)
+    const onChangeStart: DatePickerProps["onChange"] = (_, dateString) => {
+        setStartDate(dateString as string);
     };
 
-    const onChangeEnd: DatePickerProps['onChange'] = (_, dateString) => {
-        setEndDate(dateString)
+    const onChangeEnd: DatePickerProps["onChange"] = (_, dateString) => {
+        setEndDate(dateString as string);
     };
 
     return (
-        <div className="w-full h-[500px] flex justify-center gap-5 items-center">
-            {
-                isLoading ?
-                    <div className="flex items-center justify-center min-h-[900px]">
-                        <Spin size="large" />
-                    </div>
-                    :
-                    <>
+        <div className="w-full flex justify-center h-full">
+            {isLoading ? (
+                <Loading />
+            ) : (
+                <div className="flex flex-col gap-16 w-full px-10 py-5">
+
+                    <div className="flex gap-10 w-full">
+
                         <div className="flex flex-col gap-5 w-1/2">
-                            <Typography style={{ textAlign: 'left', fontSize: 22, fontWeight: '600' }}>Weekly Appointments Report</Typography>
+                            <Typography style={{ fontSize: 22, fontWeight: "600" }}>
+                                Appointments Report
+                            </Typography>
+
                             <Space direction="horizontal" size={12}>
-                                <DatePicker defaultValue={dayjs()} placeholder="Start date" onChange={onChangeStart} />
+                                <DatePicker
+                                    defaultValue={dayjs()}
+                                    placeholder="Start date"
+                                    onChange={onChangeStart}
+                                />
                                 <DatePicker placeholder="End date" onChange={onChangeEnd} />
                             </Space>
+
                             <Charts option={getAppointmnetReport(appointmentsData?.statistics)} />
                         </div>
-                        <div className="w-1/2">
-                            <Typography style={{ textAlign: 'center', fontSize: 22, fontWeight: '600', marginBottom: 68 }}>Most Used Services</Typography>
+
+                        <div className="flex flex-col w-1/2">
+                            <Typography
+                                style={{
+                                    textAlign: "center",
+                                    fontSize: 22,
+                                    fontWeight: "600",
+                                    marginBottom: 20,
+                                }}
+                            >
+                                Most Used Services
+                            </Typography>
+
                             <Charts option={getMostUsedServices(topServiceData)} />
                         </div>
-                    </>
-            }
+                    </div>
+
+                    <div className="w-full">
+                        <Charts option={getTopClients(topClients)} />
+                    </div>
+
+                    <div className="w-full">
+                        <Charts option={getTopSpecialists(topSpecialists)} />
+                    </div>
+
+                </div>
+            )}
         </div>
     );
-}
+};
 
 export default memo(Statistics);

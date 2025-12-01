@@ -1,6 +1,6 @@
 import { useGetOneServicesQuery } from '../../service/api/service.api'
 import { useParams } from 'react-router-dom'
-import { Tabs, Card, Tag, Empty, Spin, Badge } from 'antd'
+import { Tabs, Card, Tag, Empty, Badge } from 'antd'
 import {
   CalendarOutlined,
   UserOutlined,
@@ -10,6 +10,7 @@ import {
 import { Appointment } from '../../types'
 import { getStatusColor, getStatusText } from './helpers'
 import { formatDate } from '../../helpers'
+import Loading from '../../components/Loading'
 
 const ServiceDetail = () => {
   const { id } = useParams();
@@ -19,9 +20,7 @@ const ServiceDetail = () => {
     <div className="h-full bg-gray-50 p-6">
       {
         isLoading ?
-          <div className="flex items-center justify-center min-h-[800px]">
-            <Spin size="large" />
-          </div> :
+          <Loading/> :
           <>
             <div className="flex flex-col gap-4 bg-white rounded-lg shadow-sm p-4 mb-6">
               <h1 className="text-3xl font-bold text-gray-800">

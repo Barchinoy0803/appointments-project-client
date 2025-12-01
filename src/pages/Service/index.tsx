@@ -4,7 +4,8 @@ import { Service } from '../../types'
 import { useGetServicesQuery } from '../../service/api/service.api'
 import { activeOptions, ITEMS_PER_PAGE, orderOptions, serviceTableColumns } from '../../constants'
 import { useParamsHook } from '../../hooks/useParamsHook'
-import { Pagination, PaginationProps, Select, Spin, Tooltip } from 'antd'
+import { Pagination, PaginationProps, Select, Tooltip } from 'antd'
+import Loading from '../../components/Loading'
 
 const Services = () => {
   const { getParam, setParam } = useParamsHook();
@@ -35,12 +36,10 @@ const Services = () => {
   };
 
   return (
-    <div>
+    <div className='h-full'>
       {
         isLoading ?
-          <div className="flex items-center justify-center min-h-[800px]">
-            <Spin size="large" />
-          </div>
+          <Loading />
           :
           <>
             <div className='flex gap-5 justify-end p-4 items-center'>
