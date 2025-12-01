@@ -5,19 +5,20 @@ import { useLoginMutation } from "../../service/api/auth.api";
 import { useDispatch } from "react-redux";
 import { setToken } from "../../redux/features/user.slice";
 import { useNavigate } from "react-router-dom";
+import { userDataValidation } from "../../validations/user.validation";
 
 const Login = () => {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const [login, { isLoading }] = useLoginMutation()
+    const [login, { isLoading }] = useLoginMutation();
 
     const onFinish: FormProps<LoginType>['onFinish'] = async (values) => {
         try {
             const result = await login(values) as LoginData
             if (result.data.status_code === 200) {
-                navigate('/profile')
-                dispatch(setToken(result.data.data.access))
+                navigate('/profile');
+                dispatch(setToken(result.data.data.access));
             }
         } catch (error) {
             console.log(error);
@@ -38,7 +39,7 @@ const Login = () => {
                     <Form.Item<LoginType>
                         label="Phone number"
                         name="phone_number"
-                        rules={[{ required: true, message: 'Please input your phone number!' }]}
+                        rules={userDataValidation.phone_number}
                     >
                         <Input />
                     </Form.Item>
@@ -46,10 +47,11 @@ const Login = () => {
                     <Form.Item<LoginType>
                         label="Password"
                         name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
+                        rules={userDataValidation.password}
                     >
                         <Input.Password />
                     </Form.Item>
+
 
                     <Form.Item label={null}>
                         <Button type="primary" htmlType="submit" loading={isLoading}>

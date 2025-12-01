@@ -17,7 +17,7 @@ export const getAppointmnetReport = (data: MonthlyReportItem[] = []): EChartsOpt
       yAxis: { show: false },
       series: [],
     };
-  }
+  };
 
   return {
     tooltip: { trigger: "axis" },
@@ -83,4 +83,4 @@ export const getMostUsedServices = (data: MostUsedService[] = []): EChartsOption
 export const getToday = () => {
   const date = new Date()
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-}
+};

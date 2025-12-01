@@ -14,8 +14,8 @@ import Map from '../../components/Map'
 const Detail = () => {
   const { getParam, setParam } = useParamsHook();
   const page = getParam("page") || "1";
-  const { id } = useParams()
-  const { data, isLoading } = useGetOneBusinessesQuery(id)
+  const { id } = useParams();
+  const { data, isLoading } = useGetOneBusinessesQuery(id);
 
   return (
     <div className='flex flex-col gap-6 w-full h-full shadow bg-white rounded p-5'>
@@ -60,7 +60,6 @@ const Detail = () => {
               <p>{data?.description}</p>
             </div>
 
-
             <Map latitude={data?.latitude} longitude={data?.longitude} name={data?.name} />
 
             <div>
@@ -84,7 +83,4 @@ const Detail = () => {
   )
 }
 
-export default Detail
-
-// /'41.2797'
-//'69.2192'
+export default Detail;

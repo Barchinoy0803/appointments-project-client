@@ -17,6 +17,6 @@ const extendedApi = mainApi.injectEndpoints({
         })
     }),
     overrideExisting: false
-})
+});
 
 export const { useGetTopServicesQuery, useGetAppointmentsByDateQuery } = extendedApi;

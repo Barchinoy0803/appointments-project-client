@@ -1,10 +1,10 @@
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import CustomTable from '../../components/Table'
 import { ACTIONS, Business } from '../../types'
 import { useCreateBusinessMutation, useDeleteBusinessMutation, useGetBusinessesQuery, useUpdateBusinessMutation } from '../../service/api/business.api'
 import { businessTableColumns, ITEMS_PER_PAGE, orderOptions, typeOptions } from '../../constants'
 import { useParamsHook } from '../../hooks/useParamsHook'
-import { Button, Form, FormProps, Modal, Pagination, Select, Tooltip } from 'antd'
+import { Button, Form, FormProps, Modal, Pagination, PaginationProps, Select, Spin, Tooltip } from 'antd'
 import { FaPlus } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { getErrors } from '../Clients/helpers'
@@ -18,26 +18,33 @@ const Businesses = () => {
   const [form] = Form.useForm<Business>();
 
   const { getParam, setParam } = useParamsHook();
-  const page = getParam("page") || "1";
+  const page = Number(getParam("page") || 1);
   const search = getParam("search") || "";
 
-  const dispatch = useDispatch()
-  const { type, id } = useSelector((state: RootState) => state.modal.businessModal)
-
+  const dispatch = useDispatch();
+  const { type, id } = useSelector((state: RootState) => state.modal.businessModal);
 
   const [ordering, setOrdering] = useState<string>("");
   const [businesstype, setType] = useState<string>("");
   const [position, setPosition] = useState<[number, number] | null>(null);
+  const [pageSize, setPageSize] = useState<number>(ITEMS_PER_PAGE);
 
+  const { data, isLoading: businessLoading } = useGetBusinessesQuery({ offset: (Number(page) - 1) * ITEMS_PER_PAGE, ordering, search, type: businesstype });
+  const [createBusiness, { isLoading }] = useCreateBusinessMutation();
+  const [updateBusiness] = useUpdateBusinessMutation();
+  const [deleteBusiness] = useDeleteBusinessMutation();
 
-  const { data } = useGetBusinessesQuery({ offset: (Number(page) - 1) * ITEMS_PER_PAGE, ordering, search, type: businesstype })
-  const [createBusiness, { isLoading }] = useCreateBusinessMutation()
-  const [updateBusiness] = useUpdateBusinessMutation()
-  const [deleteBusiness] = useDeleteBusinessMutation()
+  useEffect(() => {
+    setParam("limit", pageSize)
+  }, [pageSize]);
+
+  useEffect(() => {
+    setParam("page", 1)
+  }, [businesstype, ordering]);
 
   const handleOpenModal = () => {
     dispatch(setBusinessModal({ isOpen: true, type: ACTIONS.CREATE }))
-  }
+  };
 
   const onFinish: FormProps<Business>['onFinish'] = async (values) => {
     try {
@@ -70,47 +77,70 @@ const Businesses = () => {
         }
       }
     })
-  }
+  };
+
+  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, size) => {
+    setPageSize(size)
+    setParam("page", current)
+  };
+
+  const onChange = (current: number) => {
+    setParam('page', current)
+  };
 
   return (
     <div>
-      <div className='flex gap-5 justify-end p-4 items-center'>
-        <Tooltip title="Date">
-          <Select
-            value={ordering}
-            onChange={(value) => setOrdering(value)}
-            defaultValue=""
-            style={{ width: 160 }}
-            options={[{ value: "", label: "All" }, ...orderOptions]}
-          />
-        </Tooltip>
-        <Tooltip title="Type">
-          <Select
-            value={businesstype}
-            onChange={(value) => setType(value)}
-            defaultValue=""
-            style={{ width: 160 }}
-            options={[{ value: "", label: "All" }, ...typeOptions]}
-          />
-        </Tooltip>
+      {
+        businessLoading ?
+          <div className="flex items-center justify-center min-h-[800px]">
+            <Spin size="large" />
+          </div>
+          :
+          <>
+            <div className='flex gap-5 justify-end p-4 items-center'>
+              <Tooltip title="Date">
+                <Select
+                  value={ordering}
+                  onChange={(value) => setOrdering(value)}
+                  defaultValue=""
+                  style={{ width: 160 }}
+                  options={[{ value: "", label: "All" }, ...orderOptions]}
+                />
+              </Tooltip>
+              <Tooltip title="Type">
+                <Select
+                  value={businesstype}
+                  onChange={(value) => setType(value)}
+                  defaultValue=""
+                  style={{ width: 160 }}
+                  options={[{ value: "", label: "All" }, ...typeOptions]}
+                />
+              </Tooltip>
 
-        <Button onClick={handleOpenModal} type="default" icon={<FaPlus />} iconPosition={'start'}>
-          Add
-        </Button>
-      </div>
+              <Button onClick={handleOpenModal} type="default" icon={<FaPlus />} iconPosition={'start'}>
+                Add
+              </Button>
+            </div>
 
-      <CustomTable<Business> data={Array.isArray(data?.items) ? data.items : []} columns={businessTableColumns(dispatch, handleDelete, Number(page))} />
-      <div className='mt-6 flex justify-end fixed bottom-10 right-20'>
-        <Pagination
-          current={Number(page)}
-          onChange={(value) => setParam("page", value.toString())}
-          pageSize={ITEMS_PER_PAGE}
-          total={data?.count}
-        />
-      </div>
-      <BusinessModal onFinish={onFinish} loading={isLoading} form={form} position={position} setPosition={setPosition} />
+            <div className='overflow-y-auto max-h-[730px]'>
+              <CustomTable<Business> data={Array.isArray(data?.items) ? data.items : []} columns={businessTableColumns(dispatch, handleDelete, Number(page))} />
+            </div>
+
+            <div className='mt-6 flex justify-end fixed bottom-10 right-20'>
+              <Pagination
+                showSizeChanger
+                onShowSizeChange={onShowSizeChange}
+                defaultCurrent={1}
+                total={data?.totalCount}
+                onChange={onChange}
+                disabled={businessLoading}
+              />
+            </div>
+            <BusinessModal onFinish={onFinish} loading={isLoading} form={form} position={position} setPosition={setPosition} />
+          </>
+      }
     </div>
   )
 }
 
-export default memo(Businesses)
+export default memo(Businesses);

@@ -7,10 +7,9 @@ export const getStatusColor = (status: string) => {
         cancelled : 'orange',
         moved: "cyan"
     }
-    return statusColors[status?.toLowerCase()] || 'default'
-}
-
+    return statusColors[status?.toLowerCase()] || 'default';
+};
 
 export const getStatusText = (status: string) => {
-    return status?.charAt(0).toUpperCase() + status?.slice(1).toLowerCase()
-}
+    return status?.charAt(0).toUpperCase() + status?.slice(1).toLowerCase();
+};

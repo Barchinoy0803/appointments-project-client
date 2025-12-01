@@ -7,20 +7,20 @@ import Login from "../Auth"
 import { logout } from "../../redux/features/user.slice"
 
 const Private = () => {
-    const { token } = useSelector((state: RootState) => state.userSlice)
-    const dispatch = useDispatch()
+    const { token } = useSelector((state: RootState) => state.userSlice);
+    const dispatch = useDispatch();
 
     const isAuthenticated = useMemo(() => {
         return validateToken(token)
-    }, [token])
+    }, [token]);
 
     useEffect(() => {
         if(!isAuthenticated) {
             dispatch(logout())
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated]);
 
     return isAuthenticated ? <Dashboard /> : <Login />
 }
 
-export default Private
+export default Private;

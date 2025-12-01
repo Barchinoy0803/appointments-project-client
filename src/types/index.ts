@@ -33,7 +33,7 @@ export interface Appointment {
     client_name: string;
     specialist_name: string;
     service_name: string;
-    created_at: string
+    created_at: string;
 };
 
 export interface Service {

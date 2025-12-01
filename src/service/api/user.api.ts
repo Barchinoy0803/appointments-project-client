@@ -41,6 +41,6 @@ const extendedApi = mainApi.injectEndpoints({
         })
     }),
     overrideExisting: false
-})
+});
 
 export const { useGetUsersQuery, useCreateUserMutation, useDeleteUserMutation, useUpdateUserMutation, useGetOneUserQuery } = extendedApi;

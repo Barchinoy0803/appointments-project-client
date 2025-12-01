@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import CustomTable from "../../components/Table"
 import { useCreateUserMutation, useDeleteUserMutation, useGetUsersQuery, useUpdateUserMutation } from '../../service/api/user.api'
 import { ITEMS_PER_PAGE, orderOptions, roleOptions, userTableColumns } from "../../constants/index"
@@ -17,25 +17,32 @@ const Clients = () => {
     const [form] = Form.useForm<FieldType>();
 
     const { getParam, setParam } = useParamsHook();
-    const page = getParam("page") || "1"
-    const search = getParam("search") || ""
-    setParam("limit", 10)
+    const page = Number(getParam("page") || 1);
+    const search = getParam("search") || "";
 
-    const [role, setRole] = useState<string>("")
-    const [ordering, setOrdering] = useState<string>("")
-    const [pageSize, setPageSize] = useState<number>(ITEMS_PER_PAGE)
+    const [role, setRole] = useState<string>("");
+    const [ordering, setOrdering] = useState<string>("");
+    const [pageSize, setPageSize] = useState<number>(ITEMS_PER_PAGE);
 
-    const { data, isLoading: userLoading } = useGetUsersQuery({ limit: pageSize, page, search, role, ordering })
-    const [createUser, { isLoading }] = useCreateUserMutation()
-    const [deleteUser] = useDeleteUserMutation()
-    const [updateUser] = useUpdateUserMutation()
+    const { data, isLoading: userLoading } = useGetUsersQuery({ limit: pageSize, page, search, role, ordering });
+    const [createUser, { isLoading }] = useCreateUserMutation();
+    const [deleteUser] = useDeleteUserMutation();
+    const [updateUser] = useUpdateUserMutation();
 
-    const dispatch = useDispatch()
-    const { type, id } = useSelector((state: RootState) => state.modal.usersModal)
+    const dispatch = useDispatch();
+    const { type, id } = useSelector((state: RootState) => state.modal.usersModal);
+
+    useEffect(() => {
+        setParam("limit", pageSize)
+    }, [pageSize]);
+
+    useEffect(() => {
+        setParam("page", 1)
+    }, [role, ordering]);
 
     const handleOpenModal = () => {
         dispatch(setUsersModal({ isOpen: true, type: ACTIONS.CREATE }))
-    }
+    };
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         try {
@@ -70,22 +77,22 @@ const Clients = () => {
         })
     };
 
-    const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
-        setPageSize(pageSize)
+    const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, size) => {
+        setPageSize(size)
         setParam("page", current)
-        setParam("limit", pageSize)
     };
 
     const onChange = (current: number) => {
         setParam('page', current)
-    }
+    };
 
     return (
         <div>
             {
-                userLoading ? <div className="flex justify-center p-6 text-xl">
-                    <Spin size="large" />
-                </div>
+                userLoading ?
+                    <div className="flex items-center justify-center min-h-[800px]">
+                        <Spin size="large" />
+                    </div>
                     :
                     <>
                         <div className='flex gap-5 justify-end p-4 items-center'>
@@ -114,7 +121,10 @@ const Clients = () => {
                             </Button>
                         </div>
 
-                        <CustomTable<User> data={Array.isArray(data?.items) ? data.items : []} columns={userTableColumns(dispatch, handleDelete, Number(page))} key={data?.id} />
+                        <div className='overflow-y-auto max-h-[730px]'>
+                            <CustomTable<User> data={Array.isArray(data?.items) ? data.items : []} columns={userTableColumns(dispatch, handleDelete, Number(page))} key={data?.id} />
+                        </div>
+
                         <div className='mt-6 flex justify-end fixed bottom-10 right-20'>
                             <Pagination
                                 showSizeChanger

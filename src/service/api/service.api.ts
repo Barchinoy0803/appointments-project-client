@@ -19,6 +19,6 @@ const extendedApi = mainApi.injectEndpoints({
         })
     }),
     overrideExisting: false
-})
+});
 
 export const { useGetServicesQuery, useGetOneServicesQuery } = extendedApi;

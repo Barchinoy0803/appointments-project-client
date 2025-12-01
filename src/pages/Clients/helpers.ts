@@ -8,4 +8,4 @@ export const getErrors = (data: any) => {
         })
     ))
     return errors
-}
+};

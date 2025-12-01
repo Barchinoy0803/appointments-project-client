@@ -6,4 +6,4 @@ export const getBusinessBody = (data: Business, position: number[] | null) => {
     latitude: position![0],
     longitude: position![1]
  }
-}
+};

@@ -185,7 +185,7 @@ export const serviceTableColumns = (page: number = 1) => [
     key: 'name',
     render: (_value: string, record: any) => {
       return (
-        <a href={`/service/${record.id}`} className="cursor-pointer !text-black hover:!text-[#1677ff]">{record.name}</a>
+        <a href={`/service/detail/${record.id}`} className="cursor-pointer !text-black hover:!text-[#1677ff]">{record.name}</a>
       )
     }
   },
@@ -241,7 +241,7 @@ export const businessTableColumns = (dispatch: AppDispatch, handleDelete: (id: n
     key: 'name',
     render: (_value: string, record: any) => {
       return (
-        <a href={`/business/${record.id}`} className="cursor-pointer !text-black hover:!text-[#1677ff]">
+        <a href={`/business/detail/${record.id}`} className="cursor-pointer !text-black hover:!text-[#1677ff]">
           {record.name}
         </a>
       )
@@ -371,7 +371,7 @@ export const typeOptions = [
 
 export const ITEMS_PER_PAGE = 10;
 
-export const hideSearchInput = ["statistics", "profile", "appointments", "business"];
+export const hideSearchInput = ["statistics", "profile", "appointments", "detail"];
 
 export const defaultIcon = new L.Icon({
     iconUrl: `${import.meta.env.BASE_URL}icons/marker.png`,

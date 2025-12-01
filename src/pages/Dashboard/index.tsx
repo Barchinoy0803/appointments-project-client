@@ -18,4 +18,4 @@ const Dashboard = () => {
     )
 }
 
-export default memo(Dashboard)
+export default memo(Dashboard);
