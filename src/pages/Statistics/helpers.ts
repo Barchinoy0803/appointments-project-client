@@ -1,5 +1,5 @@
 import { EChartsOption } from "echarts";
-import { GetTopClient, GetTopSpecialist, MonthlyReportItem, MostUsedService } from "../../types";
+import { GetTopBusiness, GetTopClient, GetTopSpecialist, MonthlyReportItem, MostUsedService } from "../../types";
 
 export const getAppointmnetReport = (data: MonthlyReportItem[] = []): EChartsOption => {
   if (!data || data.length === 0) {
@@ -59,9 +59,10 @@ export const getMostUsedServices = (data: MostUsedService[] = []): EChartsOption
   },
   series: [
     {
+      bottom: "10%",
       name: "Service Usage",
       type: "pie",
-      radius: "60%",
+      radius:  "70%",
       data: data.map((item) => ({
         name: item.service_id__name,
         value: item.total,
@@ -148,6 +149,49 @@ export const getTopSpecialists = (data: GetTopSpecialist[] = []): EChartsOption 
   };
 };
 
+export const getTopBusinesses = (data: GetTopBusiness[] = []): EChartsOption => {
+  return {
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      bottom: '5%',
+      left: 'center'
+    },
+    series: [
+      {
+        bottom: "10%",
+        name: 'Business From',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 10,
+          borderColor: '#fff',
+          borderWidth: 2
+        },
+        label: {
+          show: false,
+          position: 'center'
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 15,
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
+          show: false
+        },
+        data: data.map((item) => ({
+          value: item.total_appointments,
+          name: item.business_name
+        }))
+      }
+    ]
+  }
+};
 
 export const getToday = () => {
   const date = new Date()
@@ -155,5 +199,5 @@ export const getToday = () => {
 };
 
 export const getServiceName = (name: string) => {
-  return name.length > 10 ? `${name.slice(0, 15)}...` : name
-}
+  return name.length > 10 ? `${name.slice(0, 18)}...` : name
+};

@@ -18,6 +18,11 @@ export type GetTopSpecialist = {
     total_appointments: string;
 };
 
+export type GetTopBusiness = {
+    business_name: string;
+    total_appointments: number;
+};
+
 export interface DataType {
     key: string;
     name: string;

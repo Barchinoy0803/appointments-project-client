@@ -4,11 +4,13 @@ import {
     getAppointmnetReport,
     getMostUsedServices,
     getToday,
+    getTopBusinesses,
     getTopClients,
     getTopSpecialists
 } from "./helpers";
 import {
     useGetAppointmentsByDateQuery,
+    useGetTopBusinessesQuery,
     useGetTopClientsQuery,
     useGetTopServicesQuery,
     useGetTopSpecialistsQuery
@@ -28,6 +30,7 @@ const Statistics = () => {
     });
     const { data: topClients } = useGetTopClientsQuery({});
     const { data: topSpecialists } = useGetTopSpecialistsQuery({});
+    const { data: topBusinesses } = useGetTopBusinessesQuery({});
 
     const onChangeStart: DatePickerProps["onChange"] = (_, dateString) => {
         setStartDate(dateString as string);
@@ -42,11 +45,43 @@ const Statistics = () => {
             {isLoading ? (
                 <Loading />
             ) : (
-                <div className="flex flex-col gap-16 w-full px-10 py-5">
+                <div className="w-full px-8 py-5">
+                    <h1 className="pb-5 text-3xl text-gray-600">Statistics</h1>
+                    <div className="flex flex-col gap-16 w-full ">
 
-                    <div className="flex gap-10 w-full">
+                        <div className="flex gap-10 w-full">
+                            <div className="w-1/2">
+                                <Typography style={{ fontSize: 22, fontWeight: "600" }}>
+                                    Top 10 Businesses
+                                </Typography>
+                                <Charts option={getTopBusinesses(topBusinesses)} />
+                            </div>
 
-                        <div className="flex flex-col gap-5 w-1/2">
+                            <div className="flex flex-col w-1/2">
+                                <Typography
+                                    style={{
+                                        textAlign: "center",
+                                        fontSize: 22,
+                                        fontWeight: "600",
+                                        marginBottom: 20,
+                                    }}
+                                >
+                                    Most Used Services
+                                </Typography>
+
+                                <Charts option={getMostUsedServices(topServiceData)} />
+                            </div>
+                        </div>
+
+                        <div className="w-full">
+                            <Charts option={getTopClients(topClients)} />
+                        </div>
+
+                        <div className="w-full">
+                            <Charts option={getTopSpecialists(topSpecialists)} />
+                        </div>
+
+                        <div className="flex flex-col gap-5 w-full mb-4">
                             <Typography style={{ fontSize: 22, fontWeight: "600" }}>
                                 Appointments Report
                             </Typography>
@@ -62,31 +97,7 @@ const Statistics = () => {
 
                             <Charts option={getAppointmnetReport(appointmentsData?.statistics)} />
                         </div>
-
-                        <div className="flex flex-col w-1/2">
-                            <Typography
-                                style={{
-                                    textAlign: "center",
-                                    fontSize: 22,
-                                    fontWeight: "600",
-                                    marginBottom: 20,
-                                }}
-                            >
-                                Most Used Services
-                            </Typography>
-
-                            <Charts option={getMostUsedServices(topServiceData)} />
-                        </div>
                     </div>
-
-                    <div className="w-full">
-                        <Charts option={getTopClients(topClients)} />
-                    </div>
-
-                    <div className="w-full">
-                        <Charts option={getTopSpecialists(topSpecialists)} />
-                    </div>
-
                 </div>
             )}
         </div>

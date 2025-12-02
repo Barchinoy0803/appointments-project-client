@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { useGetMeQuery } from '../../service/api/auth.api'
 import Loading from '../../components/Loading'
+import PasswordViewer from '../../components/PasswordViewer'
 
 const Profile = () => {
   const { data, isLoading } = useGetMeQuery({})
@@ -9,7 +10,7 @@ const Profile = () => {
     <div className="w-full h-full py-2 px-3">
       {
         isLoading ?
-          <Loading/>
+          <Loading />
           :
           <>
             <h1 className="text-3xl font-bold text-gray-900 mb-8">
@@ -52,6 +53,13 @@ const Profile = () => {
                 <span className="text-lg text-gray-900">
                   {new Date(data?.created_at).toLocaleString()}
                 </span>
+              </div>
+
+              <div className='flex flex-col gap-2 w-[400px]'>
+                <span className="text-gray-500 text-sm">Password</span>
+                <div className='bg-white p-3  rounded'>
+                  <PasswordViewer password={data?.unhashed_password} />
+                </div>
               </div>
 
             </div>
