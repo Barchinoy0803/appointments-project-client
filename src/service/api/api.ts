@@ -30,7 +30,7 @@ const baseQueryWithStatusHandling: typeof baseQuery = async (args, api, extraOpt
 export const mainApi = createApi({
     reducerPath: 'mainApi',
     baseQuery: baseQueryWithStatusHandling,
-    tagTypes: ['USER', 'APPOINTMENT', 'SERVICE', 'BUSINESS'],
+    tagTypes: ['USER', 'APPOINTMENT', 'SERVICE', 'BUSINESS', 'ME'],
     endpoints: () => ({}),
     refetchOnMountOrArgChange: true,
 });

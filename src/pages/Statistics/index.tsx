@@ -50,7 +50,7 @@ const Statistics = () => {
                     <div className="flex flex-col gap-16 w-full ">
 
                         <div className="flex gap-10 w-full">
-                            <div className="w-1/2">
+                            <div className="h-[400px] w-1/2">
                                 <Typography style={{ fontSize: 22, fontWeight: "600" }}>
                                     Top 10 Businesses
                                 </Typography>

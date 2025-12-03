@@ -5,28 +5,18 @@ import { setUsersModal } from '../../redux/features/modal.slice';
 import { ACTIONS, FieldType } from '../../types';
 import { roleOptions } from '../../constants';
 import { getUserModalTitle, setButtonTitle } from './helpers';
-import { useGetOneUserQuery } from '../../service/api/user.api';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useEffect } from 'react';
 import { userDataValidation } from '../../validations/user.validation';
 
 interface CustomModalProps {
     onFinish: (values: FieldType) => void,
     loading: boolean,
-    form: FormInstance<any>
+    form: FormInstance<any>,
+    isProfilePage?: boolean
 }
 
-const CustomModal = ({ onFinish,  loading, form }: CustomModalProps) => {
-    const { isOpen, type, id } = useSelector((state: RootState) => state.modal.usersModal)
+const CustomModal = ({ onFinish, loading, form, isProfilePage = false }: CustomModalProps) => {
+    const { isOpen, type} = useSelector((state: RootState) => state.modal.usersModal)
     const dispatch = useDispatch()
-
-    const { data: userData } = useGetOneUserQuery(id ?? skipToken)
-
-    useEffect(() => {
-        if (type === ACTIONS.EDIT && userData) {
-            form.setFieldsValue({...userData, password: userData.unhashed_password})
-        }
-    }, [userData, type])
 
     const handleCancel = () => {
         dispatch(setUsersModal({ isOpen: false }))
@@ -77,27 +67,32 @@ const CustomModal = ({ onFinish,  loading, form }: CustomModalProps) => {
                                     <Input />
                                 </Form.Item>
 
-                                <Form.Item<FieldType>
-                                    label="Password"
-                                    name="password"
-                                    rules={userDataValidation.password}
-                                >
-                                    <Input.Password />
-                                </Form.Item>
+                                {
+                                    !isProfilePage &&
+                                    <>
+                                        <Form.Item<FieldType>
+                                            label="Password"
+                                            name="password"
+                                            rules={userDataValidation.password}
+                                        >
+                                            <Input.Password />
+                                        </Form.Item>
 
-                                <Form.Item<FieldType>
-                                    label="Role"
-                                    name="role"
-                                    rules={[{ required: true, message: 'Please select role!' }]}
-                                >
-                                    <Select>
-                                        {
-                                            roleOptions.map((role) => (
-                                                <Select.Option value={role.value}>{role.label}</Select.Option>
-                                            ))
-                                        }
-                                    </Select>
-                                </Form.Item>
+                                        <Form.Item<FieldType>
+                                            label="Role"
+                                            name="role"
+                                            rules={[{ required: true, message: 'Please select role!' }]}
+                                        >
+                                            <Select>
+                                                {
+                                                    roleOptions.map((role) => (
+                                                        <Select.Option value={role.value}>{role.label}</Select.Option>
+                                                    ))
+                                                }
+                                            </Select>
+                                        </Form.Item>
+                                    </>
+                                }
                             </>
                             :
                             <Typography style={{ fontSize: 18 }}>Are you sure delete?</Typography>

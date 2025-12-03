@@ -13,6 +13,8 @@ import { getErrors } from './helpers'
 import toast from 'react-hot-toast'
 import { useParamsHook } from '../../hooks/useParamsHook'
 import Loading from '../../components/Loading'
+import { useGetOneUserQuery } from '../../service/api/user.api';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 const Clients = () => {
     const [form] = Form.useForm<FieldType>();
@@ -32,6 +34,14 @@ const Clients = () => {
 
     const dispatch = useDispatch();
     const { type, id } = useSelector((state: RootState) => state.modal.usersModal);
+
+    const { data: userData } = useGetOneUserQuery(id ?? skipToken)
+
+    useEffect(() => {
+        if (type === ACTIONS.EDIT && userData) {
+            form.setFieldsValue({ ...userData, password: userData.unhashed_password })
+        }
+    }, [userData, type])
 
     useEffect(() => {
         setParam("limit", pageSize)

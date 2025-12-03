@@ -62,7 +62,7 @@ export const getMostUsedServices = (data: MostUsedService[] = []): EChartsOption
       bottom: "10%",
       name: "Service Usage",
       type: "pie",
-      radius:  "70%",
+      radius: "70%",
       data: data.map((item) => ({
         name: item.service_id__name,
         value: item.total,
@@ -99,6 +99,7 @@ export const getTopClients = (data: GetTopClient[] = []): EChartsOption => {
     },
     yAxis: {
       type: 'category',
+      inverse: true,
       data: data.map(item => item.client_name)
     },
     series: [
@@ -133,6 +134,7 @@ export const getTopSpecialists = (data: GetTopSpecialist[] = []): EChartsOption 
     },
     yAxis: {
       type: 'category',
+      inverse: true,
       data: data.map(item => item.specialist_name)
     },
     series: [

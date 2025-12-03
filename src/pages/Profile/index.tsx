@@ -1,22 +1,49 @@
-import { memo } from 'react'
-import { useGetMeQuery } from '../../service/api/auth.api'
+import { memo, useEffect } from 'react'
+import { useGetMeQuery, useUpdateMeInfoMutation } from '../../service/api/auth.api'
 import Loading from '../../components/Loading'
 import { LuLogOut } from "react-icons/lu"
-import { Button } from 'antd'
-import { useDispatch } from 'react-redux'
+import { Button, Form, FormProps } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../../redux/features/user.slice'
 import { useNavigate } from 'react-router-dom'
-import PasswordViewer from '../../components/PasswordViewer'
+import { MdEdit } from "react-icons/md";
+import { setUsersModal } from '../../redux/features/modal.slice'
+import CustomModal from '../../components/Popup'
+import { ACTIONS, EditMyInfo } from '../../types'
+import { RootState } from '../../redux'
 
 const Profile = () => {
+  const [form] = Form.useForm<EditMyInfo>();
   const navigate = useNavigate()
-  const { data, isLoading } = useGetMeQuery({})
+
   const dispatch = useDispatch()
-  
+  const { type } = useSelector((state: RootState) => state.modal.usersModal);
+
+  const { data, isLoading } = useGetMeQuery({})
+  const [updateInfo] = useUpdateMeInfoMutation()
+
+  useEffect(() => {
+    if (type === ACTIONS.EDIT) {
+      form.setFieldsValue(data)
+    }
+  }, [type, data]);
+
   const handleLogout = () => {
     dispatch(logout())
     navigate("/login")
-  }
+  };
+
+  const onFinish: FormProps<EditMyInfo>['onFinish'] = async (values) => {
+    try {
+      if (type === ACTIONS.EDIT) {
+        await updateInfo({ body: values });
+      };
+      dispatch(setUsersModal({ isOpen: false }));
+    } catch (error) {
+      console.log(error);
+    }
+    form.resetFields();
+  };
 
   return (
     <div className="h-full bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
@@ -28,16 +55,27 @@ const Profile = () => {
             <div className="max-w-6xl mx-auto">
               <div className="flex items-center justify-between mb-8">
                 <h1 className="text-4xl font-bold text-white">Profile</h1>
-                <Button
-                  type="primary"
-                  danger
-                  icon={<LuLogOut className="text-lg" />}
-                  onClick={handleLogout}
-                  size="large"
-                  className="flex items-center gap-2 shadow-lg"
-                >
-                  Logout
-                </Button>
+                <div className='flex gap-3'>
+                  <Button
+                    icon={<MdEdit />}
+                    size="large"
+                    type="dashed"
+                    onClick={() => dispatch(setUsersModal({ isOpen: true, type: ACTIONS.EDIT }))}
+                    className="flex items-center gap-2 shadow-lg">
+                    Edit my info
+                  </Button>
+
+                  <Button
+                    type="primary"
+                    danger
+                    icon={<LuLogOut className="text-lg" />}
+                    onClick={handleLogout}
+                    size="large"
+                    className="flex items-center gap-2 shadow-lg"
+                  >
+                    Logout
+                  </Button>
+                </div>
               </div>
 
               <div className="flex flex-col sm:flex-row items-center gap-6">
@@ -54,7 +92,7 @@ const Profile = () => {
                     </span>
                   </div>
                 )}
-                
+
                 <div className="text-center sm:text-left">
                   <h2 className="text-3xl font-bold text-white mb-2">
                     {data?.first_name} {data?.last_name}
@@ -99,21 +137,10 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-lg">
-                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <p className="text-sm text-slate-500 font-semibold uppercase tracking-wide">Password</p>
-              </div>
-              <PasswordViewer password={data?.unhashed_password}/>
-            </div>
           </div>
         </>
       )}
+      <CustomModal onFinish={onFinish} form={form} loading={false} isProfilePage />
     </div>
   )
 }

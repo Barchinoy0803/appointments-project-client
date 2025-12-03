@@ -3,7 +3,7 @@ import { mainApi } from "./api";
 const extendedApi = mainApi.injectEndpoints({
     endpoints: (build) => ({
         getUsers: build.query({
-            query: ( params ) => ({
+            query: (params) => ({
                 method: "GET",
                 url: `/admin/users`,
                 params
@@ -38,7 +38,7 @@ const extendedApi = mainApi.injectEndpoints({
                 body
             }),
             invalidatesTags: ['USER']
-        })
+        }),
     }),
     overrideExisting: false
 });

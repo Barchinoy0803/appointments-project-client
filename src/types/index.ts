@@ -10,7 +10,7 @@ export type MostUsedService = {
 
 export type GetTopClient = {
     client_name: string;
-    total_appointments: string;
+    total_appointments: number;
 }
 
 export type GetTopSpecialist = {
@@ -110,6 +110,12 @@ export type FieldType = {
     phone_number: string;
     role: string;
 };
+
+export type EditMyInfo = {
+    first_name: string;
+    last_name: string;
+    phone_number: string;
+}
 
 export type ParamsType = {
     limit: number;
