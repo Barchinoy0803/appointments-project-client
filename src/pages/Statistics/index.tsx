@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import Charts from "../../components/Charts";
 import {
     getAppointmnetReport,
@@ -18,6 +18,8 @@ import {
 import { DatePickerProps, Typography, DatePicker, Space } from "antd";
 import dayjs from "dayjs";
 import Loading from "../../components/Loading";
+import { useDispatch } from "react-redux";
+import { setBreadcrumb } from "../../redux/features/breadcrumb.slice";
 
 const Statistics = () => {
     const [start, setStartDate] = useState<string>("");
@@ -31,6 +33,12 @@ const Statistics = () => {
     const { data: topClients } = useGetTopClientsQuery({});
     const { data: topSpecialists } = useGetTopSpecialistsQuery({});
     const { data: topBusinesses } = useGetTopBusinessesQuery({});
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(setBreadcrumb([]))
+    }, [dispatch]);
 
     const onChangeStart: DatePickerProps["onChange"] = (_, dateString) => {
         setStartDate(dateString as string);

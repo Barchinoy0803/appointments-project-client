@@ -11,16 +11,31 @@ import { Appointment } from '../../types'
 import { getStatusColor, getStatusText } from './helpers'
 import { formatDate } from '../../helpers'
 import Loading from '../../components/Loading'
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { setBreadcrumb } from '../../redux/features/breadcrumb.slice'
 
 const ServiceDetail = () => {
   const { id } = useParams();
   const { data, isLoading } = useGetOneServicesQuery(id);
 
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setBreadcrumb([
+        { label: "Businesses", link: "/businesses" },
+        { label: `${data.business_title}`, link: `/business/detail/${data.business_id}` },
+        { label: `${data.name}` },
+      ]))
+    }
+  }, [dispatch, data])
+
   return (
     <div className="h-full bg-gray-50 p-6">
       {
         isLoading ?
-          <Loading/> :
+          <Loading /> :
           <>
             <div className="flex flex-col gap-4 bg-white rounded-lg shadow-sm p-4 mb-6">
               <h1 className="text-3xl font-bold text-gray-800">

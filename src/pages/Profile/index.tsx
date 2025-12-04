@@ -11,6 +11,7 @@ import { setUsersModal } from '../../redux/features/modal.slice'
 import CustomModal from '../../components/Popup'
 import { ACTIONS, EditMyInfo } from '../../types'
 import { RootState } from '../../redux'
+import { setBreadcrumb } from '../../redux/features/breadcrumb.slice'
 
 const Profile = () => {
   const [form] = Form.useForm<EditMyInfo>();
@@ -27,6 +28,10 @@ const Profile = () => {
       form.setFieldsValue(data)
     }
   }, [type, data]);
+
+  useEffect(() => {
+    dispatch(setBreadcrumb([]))
+  }, [dispatch]);
 
   const handleLogout = () => {
     dispatch(logout())

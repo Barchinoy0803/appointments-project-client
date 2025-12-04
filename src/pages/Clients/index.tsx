@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import CustomTable from "../../components/Table"
 import { useCreateUserMutation, useDeleteUserMutation, useGetUsersQuery, useUpdateUserMutation } from '../../service/api/user.api'
 import { ITEMS_PER_PAGE, orderOptions, roleOptions, userTableColumns } from "../../constants/index"
@@ -15,6 +15,7 @@ import { useParamsHook } from '../../hooks/useParamsHook'
 import Loading from '../../components/Loading'
 import { useGetOneUserQuery } from '../../service/api/user.api';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { setBreadcrumb } from '../../redux/features/breadcrumb.slice'
 
 const Clients = () => {
     const [form] = Form.useForm<FieldType>();
@@ -26,6 +27,7 @@ const Clients = () => {
     const [role, setRole] = useState<string>("");
     const [ordering, setOrdering] = useState<string>("");
     const [pageSize, setPageSize] = useState<number>(ITEMS_PER_PAGE);
+    const isFirstRender = useRef(true);
 
     const { data, isLoading: userLoading } = useGetUsersQuery({ limit: pageSize, page, search, role, ordering });
     const [createUser, { isLoading }] = useCreateUserMutation();
@@ -38,6 +40,10 @@ const Clients = () => {
     const { data: userData } = useGetOneUserQuery(id ?? skipToken)
 
     useEffect(() => {
+        dispatch(setBreadcrumb([]))
+    }, [dispatch]);
+
+    useEffect(() => {
         if (type === ACTIONS.EDIT && userData) {
             form.setFieldsValue({ ...userData, password: userData.unhashed_password })
         }
@@ -48,7 +54,11 @@ const Clients = () => {
     }, [pageSize]);
 
     useEffect(() => {
-        setParam("page", 1)
+        if (!isFirstRender.current) {
+            setParam("role", role);
+            setParam("ordering", ordering);
+            setParam("page", 1); 
+        }
     }, [role, ordering]);
 
     const handleOpenModal = () => {
@@ -138,7 +148,7 @@ const Clients = () => {
                             <Pagination
                                 showSizeChanger
                                 onShowSizeChange={onShowSizeChange}
-                                defaultCurrent={1}
+                                current={page}
                                 total={data?.totalCount}
                                 onChange={onChange}
                                 disabled={userLoading}

@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import CustomTable from '../../components/Table'
 import { ACTIONS, Business } from '../../types'
 import { useCreateBusinessMutation, useDeleteBusinessMutation, useGetBusinessesQuery, useUpdateBusinessMutation } from '../../service/api/business.api'
@@ -14,6 +14,7 @@ import { RootState } from '../../redux'
 import { setBusinessModal } from '../../redux/features/modal.slice'
 import { getBusinessBody } from './helpers'
 import Loading from '../../components/Loading'
+import { setBreadcrumb } from '../../redux/features/breadcrumb.slice'
 
 const Businesses = () => {
   const [form] = Form.useForm<Business>();
@@ -29,6 +30,7 @@ const Businesses = () => {
   const [businesstype, setType] = useState<string>("");
   const [position, setPosition] = useState<[number, number] | null>(null);
   const [pageSize, setPageSize] = useState<number>(ITEMS_PER_PAGE);
+  const isFirstRender = useRef(true);
 
   const { data, isLoading: businessLoading } = useGetBusinessesQuery({ offset: (Number(page) - 1) * ITEMS_PER_PAGE, ordering, search, type: businesstype });
   const [createBusiness, { isLoading }] = useCreateBusinessMutation();
@@ -36,11 +38,19 @@ const Businesses = () => {
   const [deleteBusiness] = useDeleteBusinessMutation();
 
   useEffect(() => {
+    dispatch(setBreadcrumb([]))
+  }, [dispatch]);
+
+  useEffect(() => {
     setParam("limit", pageSize)
   }, [pageSize]);
 
   useEffect(() => {
-    setParam("page", 1)
+    if(isFirstRender.current) {
+      setParam("businessType", businesstype)
+      setParam("ordering", ordering)
+      setParam("page", 1)
+    }
   }, [businesstype, ordering]);
 
   const handleOpenModal = () => {
@@ -93,7 +103,7 @@ const Businesses = () => {
     <div className='h-full'>
       {
         businessLoading ?
-          <Loading/>
+          <Loading />
           :
           <>
             <div className='flex gap-5 justify-end p-4 items-center'>

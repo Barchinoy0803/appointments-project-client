@@ -6,6 +6,8 @@ import { appointmentTableColumns, ITEMS_PER_PAGE, orderOptions, statusOptions } 
 import { useParamsHook } from '../../hooks/useParamsHook'
 import { Pagination, PaginationProps, Select, Tooltip } from 'antd'
 import Loading from '../../components/Loading'
+import { useDispatch } from 'react-redux'
+import { setBreadcrumb } from '../../redux/features/breadcrumb.slice'
 
 const Appointments = () => {
     const { getParam, setParam } = useParamsHook();
@@ -16,6 +18,12 @@ const Appointments = () => {
     const [pageSize, setPageSize] = useState<number>(ITEMS_PER_PAGE);
 
     const { data, isLoading } = useGetAppointmentsQuery({ offset: (Number(page) - 1) * ITEMS_PER_PAGE, ordering, status });
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setBreadcrumb([]))
+    }, [dispatch]);
 
     useEffect(() => {
         setParam("limit", pageSize);

@@ -11,12 +11,28 @@ import { FaPhone } from "react-icons/fa6";
 import { formatDate } from '../../helpers'
 import Map from '../../components/Map'
 import Loading from '../../components/Loading'
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { setBreadcrumb } from '../../redux/features/breadcrumb.slice'
 
 const Detail = () => {
   const { getParam, setParam } = useParamsHook();
   const page = getParam("page") || "1";
   const { id } = useParams();
   const { data, isLoading } = useGetOneBusinessesQuery(id);
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (data) {
+      dispatch(
+        setBreadcrumb([
+          { label: "Business", link: "/businesses" },
+          { label: `${data.name}` },
+        ])
+      )
+    }
+  }, [dispatch, data])
 
   return (
     <div className='flex flex-col gap-6 w-full h-full shadow bg-white rounded p-5'>

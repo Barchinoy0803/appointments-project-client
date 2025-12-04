@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import CustomTable from '../../components/Table'
 import { Service } from '../../types'
 import { useGetServicesQuery } from '../../service/api/service.api'
@@ -6,6 +6,8 @@ import { activeOptions, ITEMS_PER_PAGE, orderOptions, serviceTableColumns } from
 import { useParamsHook } from '../../hooks/useParamsHook'
 import { Pagination, PaginationProps, Select, Tooltip } from 'antd'
 import Loading from '../../components/Loading'
+import { useDispatch } from 'react-redux'
+import { setBreadcrumb } from '../../redux/features/breadcrumb.slice'
 
 const Services = () => {
   const { getParam, setParam } = useParamsHook();
@@ -15,15 +17,26 @@ const Services = () => {
   const [ordering, setOrdering] = useState<string>("")
   const [is_active, setActive] = useState<string>()
   const [pageSize, setPageSize] = useState<number>(ITEMS_PER_PAGE);
+  const isFirstRender = useRef(true);
 
   const { data, isLoading } = useGetServicesQuery({ offset: (Number(page) - 1) * ITEMS_PER_PAGE, search, ordering, is_active })
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(setBreadcrumb([]))
+  }, [dispatch]);
 
   useEffect(() => {
     setParam("limit", pageSize)
   }, [pageSize]);
 
   useEffect(() => {
-    setParam("page", 1)
+    if (isFirstRender.current) {
+      setParam("ordering", ordering)
+      setParam("is_active", is_active!)
+      setParam("page", 1)
+    }
   }, [ordering, is_active]);
 
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, size) => {

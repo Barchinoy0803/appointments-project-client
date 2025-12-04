@@ -2,6 +2,8 @@ import { memo } from 'react'
 import Sidebar from '../../components/Sidebar'
 import { Outlet } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
+import Breadcrumb from '../../components/BreadCrumb'
+
 
 const Dashboard = () => {
     return (
@@ -10,7 +12,8 @@ const Dashboard = () => {
 
             <div className='flex flex-col flex-1 bg-white'>
                 <Navbar />
-                <div  className='flex-1 h-full overflow-y-auto bg-gray-100 p-4'>
+                <div className='flex-1 h-full overflow-y-auto bg-gray-100 p-4'>
+                    <Breadcrumb />
                     <Outlet />
                 </div>
             </div>
